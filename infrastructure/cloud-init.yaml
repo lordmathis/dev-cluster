@@ -1,0 +1,80 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+package_reboot_if_required: true
+
+users:
+- name: ${username}
+  groups: [ sudo ]
+  shell: /usr/bin/zsh
+  hashed_passwd: ${user_hashed_password}
+  lock_passwd: false
+  ssh_authorized_keys:
+  - ${user_ssh_public_key}
+- name: git
+  lock_passwd: true
+
+packages:
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - gnupg2
+  - git
+  - zsh
+  - ufw
+  - fail2ban
+  - tmux
+  - bat
+  - unzip
+
+write_files:
+  - content: |
+      #!/bin/sh
+      GITEA_POD=$(kubectl --kubeconfig /home/git/.kube/config get po -n gitea -l app=gitea -o name --no-headers=true | cut -d'/' -f2)
+      kubectl --kubeconfig /home/git/.kube/config exec -i -n gitea $GITEA_POD -c gitea -- env SSH_ORIGINAL_COMMAND="$SSH_ORIGINAL_COMMAND" /bin/sh "$@"      
+    path: /usr/local/bin/gitea-shell
+    permissions: '0755'
+  - content: |
+      #!/bin/sh
+      GITEA_POD=$(kubectl --kubeconfig /home/git/.kube/config get po -n gitea -l app=gitea -o name --no-headers=true | cut -d'/' -f2)
+      kubectl --kubeconfig /home/git/.kube/config exec -i -n gitea $GITEA_POD -c gitea -- /usr/local/bin/gitea keys -e git -u $1 -t $2 -k $3      
+    permissions: '0755'
+    path: /usr/local/bin/gitea-keys
+
+ssh:
+  emit_keys_to_console: false
+ssh_pwauth: false
+disable_root: true
+
+ssh_config:
+  Match User git:
+    AuthorizedKeysCommandUser: git
+    AuthorizedKeysCommand: /usr/local/bin/gitea-keys %u %t %k
+
+runcmd:
+  # UFW
+  - ufw default deny incoming
+  - ufw default allow outgoing
+  - ufw allow ssh
+  - ufw allow http
+  - ufw allow https
+  - ufw logging on
+  - ufw enable
+  # SSH key for user
+  - su ${username} -c 'ssh-keygen -t ed25519 -f /home/${username}/.ssh/id_ed25519 -q -N "" '
+  # Expire password for user
+  - chage -d 0 ${username}
+  # SSH Passthrough for user git
+  - usermod -s /usr/local/bin/gitea-shell git
+  # k3s
+  - curl -sfL https://get.k3s.io | sh -s - --disable=traefik
+  # helm
+  - curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+  - chmod 700 get_helm.sh
+  - ./get_helm.sh
+  # Install Flux
+  - curl -s https://fluxcd.io/install.sh | sudo bash
+  # Bootstrap Flux (adjust the GitHub details as needed)
+  - su ${username} -c 'flux bootstrap github --owner=${github_username} --repository=${github_repo} --path=cluster-config --personal'
+
+final_message: "The system is finally up, after $UPTIME seconds"
