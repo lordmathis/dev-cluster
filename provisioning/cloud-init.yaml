@@ -62,8 +62,6 @@ runcmd:
   - ufw enable
   # SSH key for user
   - su ${username} -c 'ssh-keygen -t ed25519 -f /home/${username}/.ssh/id_ed25519 -q -N "" '
-  # Expire password for user
-  - chage -d 0 ${username}
   # SSH Passthrough for user git
   - usermod -s /usr/local/bin/gitea-shell git
   # k3s
@@ -73,6 +71,8 @@ runcmd:
   - chmod 700 get_helm.sh
   - ./get_helm.sh
   # Install and bootstrap Flux
-  - curl -s https://fluxcd.io/install.sh | sudo bash
+  - curl -s https://fluxcd.io/install.sh | bash
   - su ${username} -c 'export GITHUB_TOKEN=${github_token} && flux bootstrap github --owner=${github_username} --repository=${github_repo} --personal'
+  # Expire password for user
+  - chage -d 0 ${username}
 final_message: "The system is finally up, after $UPTIME seconds"
