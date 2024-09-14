@@ -66,6 +66,13 @@ runcmd:
   - usermod -s /usr/local/bin/gitea-shell git
   # k3s
   - curl -sfL https://get.k3s.io | sh -s - --disable=traefik
+  # Wait for k3s to be ready
+  - timeout 300 bash -c 'until kubectl get nodes; do sleep 5; done'
+  # Set up kubeconfig for user
+  - mkdir -p /home/${username}/.kube
+  - cp /etc/rancher/k3s/k3s.yaml /home/${username}/.kube/config
+  - chown -R ${username}:${username} /home/${username}/.kube
+  - chmod 600 /home/${username}/.kube/config
   # helm
   - curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
   - chmod 700 get_helm.sh
