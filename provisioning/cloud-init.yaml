@@ -79,5 +79,5 @@ runcmd:
   - ./get_helm.sh
   # Install and bootstrap Flux
   - curl -s https://fluxcd.io/install.sh | bash
-  - su ${username} -c 'export GITHUB_TOKEN=${github_token} && flux bootstrap github --owner=${github_username} --repository=${github_repo} --personal'
+  - su ${username} -c 'export GITHUB_TOKEN=${github_token} && flux bootstrap github --owner=${github_username} --repository=${github_repo} --path=clusters/prod --personal'
 final_message: "The system is finally up, after $UPTIME seconds"
