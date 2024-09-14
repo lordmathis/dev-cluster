@@ -72,9 +72,7 @@ runcmd:
   - curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
   - chmod 700 get_helm.sh
   - ./get_helm.sh
-  # Install Flux
+  # Install and bootstrap Flux
   - curl -s https://fluxcd.io/install.sh | sudo bash
-  # Bootstrap Flux (adjust the GitHub details as needed)
-  - su ${username} -c 'flux bootstrap github --owner=${github_username} --repository=${github_repo} --path=cluster-config --personal'
-
+  - su ${username} -c 'export GITHUB_TOKEN=${github_token} && flux bootstrap github --owner=${github_username} --repository=${github_repo} --personal'
 final_message: "The system is finally up, after $UPTIME seconds"

@@ -1,0 +1,24 @@
+AWS_ENDPOINT_URL_S3: ENC[AES256_GCM,data:RjiLoq0DoK9dJ/WmISwYg18jZ78MGQ==,iv:Y/IUlxpBgHd7YGbnNCynz3nXvk9Rx2aD6HH8ZOlQNlQ=,tag:Van8YpUF3aWuPPQru0hxBQ==,type:str]
+AWS_REGION: ENC[AES256_GCM,data:0n8uNFr7,iv:9xDqcqhMVRMuCR+3vR6cgT+gJQw/47gSjPGUY7MZJts=,tag:gzdBt+SUyOGFGcUfh1AFzg==,type:str]
+AWS_ACCESS_KEY_ID: ENC[AES256_GCM,data:iWeHSVqQ3IWJLbo62Q5sicULUQo=,iv:je+lGXBvstmd0E1Q3lD4fM4QGoT8Ar2chf4X3tTIgA8=,tag:ku/ziH33flGuEg+2F8GRSw==,type:str]
+AWS_SECRET_ACCESS_KEY: ENC[AES256_GCM,data:jKSQUPsszXKlR4EZS/XSi7lP8c8MRr0soweZo4K8HCMcMAEZ,iv:ZoUwZa7GUURBHpvXeg7NCZGzKkv94limq1sU21iMYdk=,tag:m1Y0wLNHjRjWpyYPw2hcjw==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age1jk99rtxq3ep2xj2w886cchddf7jypqpwkr3dszg5dzq93gn8cy9qyc786m
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAzOVZmVlloNis2VU40dVRz
+            Q3VFTGw3WWU4d0srTm9oWnVoOVh2bXZBRjAwCktxL0w0WDF2cVp2ME5DeDhDYWJx
+            d2hvbUZUWmtDeDlUdjZNUWtJVFA3dmcKLS0tIGNEYTBib1VoTkIyTWN3UFVjdi9n
+            RHA1UFQ5Q0VOVE9pRitweUV4Y3lTRGsK5fCBfCfNnKyBkFbTnHNr0M9ttLlfX+1i
+            zYKa1NWws2m53qBI8cTI5Y323UvUDsBma1MJeUKD04IT6ulwOHTJzQ==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2024-09-14T19:24:55Z"
+    mac: ENC[AES256_GCM,data:lXgbX0BuPpI6W5sHDGCsXYEnGSWq/9kWW/Hdq/420nuFe+cIaTv/oq4kshu9NsHc+2V2Fy/Ub6UdmO2VVaHfcgmu8sD7loe8iEyMIKROTcvDwOpqLjmYCld/jVvFyV2HhFrmYVxmDzwCTR7QQ5VdCFvPzkMqsrARb++8grE78FE=,iv:IEtD6rmzHlyJKR47aMpyvgSIcBbGmPsaMHsk2KYVajw=,tag:SdZxLTPde5T8pt/jB88DhQ==,type:str]
+    pgp: []
+    unencrypted_regex: ^(apiVersion|metadata|kind|type)$
+    version: 3.9.0

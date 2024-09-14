@@ -10,6 +10,11 @@ terraform {
     }
   }
   required_version = ">= 0.13"
+
+  backend "s3" {
+    bucket = "value"
+    key    = "terraform.tfstate"
+  }
 }
 
 provider "hcloud" {
@@ -34,12 +39,13 @@ data "cloudinit_config" "k8s_node" {
       user_ssh_public_key = data.sops_file.secrets.data["user_ssh_public_key"]
       github_username = data.sops_file.secrets.data["github_username"]
       github_repo = data.sops_file.secrets.data["github_repo"]
+      github_token = data.sops_file.secrets.data["github_token"]
     })
   }
 }
 
 resource "hcloud_server" "cluster" {
-  name        = "auberon"
+  name        = "auberon2"
   image       = "ubuntu-24.04"
   server_type = "cx22"
   location    = "nbg1"
