@@ -2,3 +2,4 @@
 secrets.yaml
 terraform.tfvars
 s3_env.yaml
+.terraform
