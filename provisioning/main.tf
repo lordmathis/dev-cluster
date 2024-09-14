@@ -56,7 +56,7 @@ resource "hcloud_server" "cluster" {
 }
 
 resource "hcloud_firewall" "cluster-firewall" {
-  name = "cluster-firewall"
+  name = "cluster-firewall2"
   apply_to {
     server = hcloud_server.cluster.id
   }
