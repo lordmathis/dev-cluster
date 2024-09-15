@@ -73,7 +73,9 @@ runcmd:
   - cp /etc/rancher/k3s/k3s.yaml /home/${username}/.kube/config
   - chown -R ${username}:${username} /home/${username}/.kube
   - chmod 600 /home/${username}/.kube/config
-  # helm
+  # Dotfiles
+  - su ${username} -c 'curl https://raw.githubusercontent.com/LordMathis/dotfiles/main/install.zsh | /usr/bin/zsh -s -- server'
+  # Helm
   - curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
   - chmod 700 get_helm.sh
   - ./get_helm.sh
