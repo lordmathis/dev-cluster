@@ -10,7 +10,9 @@ users:
   hashed_passwd: ${user_hashed_password}
   lock_passwd: false
   ssh_authorized_keys:
-  - ${user_ssh_public_key}
+  %{ for key in user_ssh_public_keys ~}
+    - ${key}
+  %{ endfor ~}
 - name: git
   lock_passwd: true
 
