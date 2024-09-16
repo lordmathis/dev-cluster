@@ -38,7 +38,7 @@ data "cloudinit_config" "k8s_node" {
     content = templatefile("${path.module}/cloud-init.yaml", {
       username = data.sops_file.secrets.data["username"]
       user_hashed_password = data.sops_file.secrets.data["user_hashed_password"]
-      user_ssh_public_key = data.sops_file.secrets.data["user_ssh_public_key"]
+      user_ssh_public_keys = yamldecode(data.sops_file.secrets.data["user_ssh_public_keys"])
       github_username = data.sops_file.secrets.data["github_username"]
       github_repo = data.sops_file.secrets.data["github_repo"]
       github_token = data.sops_file.secrets.data["github_token"]
