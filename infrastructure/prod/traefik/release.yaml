@@ -13,3 +13,6 @@ spec:
         kind: HelmRepository
         name: traefik-helm-repo
       interval: 10m
+  valuesFrom:
+    - kind: ConfigMap
+      name: traefik-prod-values
