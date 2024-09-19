@@ -1,0 +1,40 @@
+domain: 'namesny.com'
+configMap:
+  authentication_backend:
+    file:
+      enabled: true
+      path: /users/users_database.yaml
+      password:
+        algorithm: argon2
+        argon2:
+          variant: argon2id
+          memory: 65536
+    ldap:
+      enabled: false
+  access_control:
+    rules:
+      - domain: '*.namesny.com'
+        policy: one_factor
+  session:
+    redis:
+      enabled: false
+  storage:
+    local:
+      enabled: true
+      path: /config/db.sqlite3
+    postgres:
+      enabled: false
+  notifier:
+    smtp:
+      enabled: false
+    filesystem:
+      enabled: true
+
+pod:
+  extraVolumeMounts:
+  - name: authelia-users-vol
+    mountPath: /users
+  extraVolumes:
+  - name: authelia-users-vol
+    secret:
+      secretName: authelia-users-secret
