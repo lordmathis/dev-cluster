@@ -28,6 +28,7 @@ packages:
   - tmux
   - bat
   - unzip
+  - age
 
 write_files:
   - content: |
@@ -85,6 +86,10 @@ runcmd:
   - curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
   - mv kustomize /usr/local/bin/
   - chmod +x /usr/local/bin/kustomize
+  # Sops
+  - curl -LO https://github.com/getsops/sops/releases/download/v3.9.0/sops-v3.9.0.linux.amd64
+  - mv sops-v3.9.0.linux.amd64 /usr/local/bin/sops
+  - chmod +x /usr/local/bin/sops
   # Install and bootstrap Flux
   - curl -s https://fluxcd.io/install.sh | bash
   - su ${username} -c 'export GITHUB_TOKEN=${github_token} && flux bootstrap github --owner=${github_username} --repository=${github_repo} --path=clusters/prod --personal'
