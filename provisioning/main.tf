@@ -3,10 +3,15 @@ terraform {
   required_providers {
     hcloud = {
       source = "hetznercloud/hcloud"
+      version = "~> 1.0"
     }
     sops = {
       source  = "carlpett/sops"
-      version = "~> 0.5"
+      version = "~> 1.0"
+    }
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "~> 4.0"
     }
   }
   required_version = ">= 0.13"
@@ -24,6 +29,10 @@ provider "hcloud" {
 }
 
 provider "sops" {}
+
+provider "cloudflare" {
+  api_token = var.cloudflare_api_token
+}
 
 data "sops_file" "secrets" {
   source_file = "secrets.enc.yaml"
@@ -98,6 +107,20 @@ resource "hcloud_firewall" "cluster-firewall" {
       "::/0"
     ]
   }
+}
+
+data "cloudflare_zones" "domain" {
+  filter {
+    name = data.sops_file.secrets.data["domain_name"]
+  }
+}
+
+resource "cloudflare_record" "cluster" {
+  zone_id = data.cloudflare_zones.domain.zones[0].id
+  name    = "@"
+  value   = hcloud_server.cluster.ipv4_address
+  type    = "A"
+  proxied = false
 }
 
 output "server_ip" {
