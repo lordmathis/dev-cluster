@@ -8,6 +8,7 @@ Provisioning, configuration and manifests for my Kubernetes dev cluster on Hetzn
 - [SOPS](https://github.com/mozilla/sops)
 - [Age](https://github.com/FiloSottile/age)
 - A Hetzner Cloud account and API token
+- Cloudflare DNS API token
 - A GitHub account and personal access token (for Flux)
 - S3 compatible storage credentials
 
@@ -61,6 +62,11 @@ Provisioning, configuration and manifests for my Kubernetes dev cluster on Hetzn
    ```
 
 6. **Initialize OpenTofu:**
+
+   ```bash
+   sops exec-env s3_env.enc.yaml 'tofu init'
+   ```
+
    ```bash
    tofu init
    tofu plan
