@@ -1,4 +1,4 @@
-domain: 'namesny.com'
+domain: 'example.com'
 configMap:
   authentication_backend:
     file:
@@ -13,7 +13,7 @@ configMap:
       enabled: false
   access_control:
     rules:
-      - domain: '*.namesny.com'
+      - domain: '*.example.com'
         policy: one_factor
   session:
     redis:

@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcard-nmsny-dev
+  namespace: traefik
+spec:
+  secretName: wildcard-nmsny-dev-tls
+  dnsNames:
+    - "example.com"
+    - "*.example.com"
+  issuerRef:
+    name: cloudflare-prod
+    kind: Issuer

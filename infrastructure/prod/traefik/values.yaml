@@ -13,7 +13,7 @@ logs:
 ingressRoute:
   dashboard:
     enabled: true
-    matchRule: Host(`traefik.namesny.com`)
+    matchRule: Host(`traefik.example.com`)
     entryPoints: ["websecure"]
     middlewares:
       - name: "auth-authelia@kubernetescrd"
@@ -33,3 +33,7 @@ ports:
 service:
   spec:
     externalTrafficPolicy: Local
+tlsStore:
+  default:
+    defaultCertificate:
+      secretName: wildcard-nmsny-dev-tls
