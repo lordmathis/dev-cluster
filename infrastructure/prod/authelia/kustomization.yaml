@@ -6,6 +6,7 @@ resources:
   - release.yaml
   - ingress.yaml
   - forward-auth-middleware.yaml
+  - users-database.enc.yaml
 
 configMapGenerator:
   - name: authelia-prod-values

@@ -6,9 +6,6 @@ configMap:
       path: /users/users_database.yaml
       password:
         algorithm: argon2
-        argon2:
-          variant: argon2id
-          memory: 65536
     ldap:
       enabled: false
   access_control:
