@@ -7,7 +7,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-  - match: Host(`auth.namesny.com`)
+  - match: Host(`auth.nmsny.dev`)
     kind: Rule
     services:
     - name: authelia
