@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: authelia-users-secret
+    namespace: auth
+type: Opaque
+stringData:
+    users_database.yaml: ENC[AES256_GCM,data:kCe/p6wjRyeyGOtZCLUdatbFpDoDeFg5aKOh6aqsSDzqpojrflRpzOHhrvVaA827BPDB1TWgY+ab0eW3V/p5WOjDusxj4xejAJneyDI1Zmqc/tA2eNCKsl/ppSLZnFPPKB0hNyWytjCPauQnWGePFL74Jp21VUTkgSIKgEKOO5yVva1MG1qa4QR2ZcR7dE3izyUZ70PWeqCXYWT+Rrg+Eii8KT1TyzGMxFZQjpEbZrEgBWI/IXg4NHg09Rn48Ld/sdIY77VygJQ5VnrqX3invaxRQzB8VPrsqJsGwD54qw==,iv:9Yx2ySDyQmCeM6Q184rt7UbKDOTfN/EMfH+gqDTrkJw=,tag:NeH3Sd//N8/5TpNQZoETGA==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age1jk99rtxq3ep2xj2w886cchddf7jypqpwkr3dszg5dzq93gn8cy9qyc786m
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAzamNJTXRlWktFSHB5czBN
+            MlVpL0tvWnNqY3ByUUROQWhnZUFsMXh0d244CmVzVjF0TGxaQktPaVdEQWxXSENI
+            Z3d4R2tnU0hPZzcrQU9qZHhiZ0xuRWMKLS0tIGc2QzI0SGdLSUNvMno3N01McGEx
+            ckhDNnFseG9EVVhmb1g2MThGZW1XU00K7KPnIX5XEbr3FpYK4imZtiS5yhbdyz9e
+            yDh+InbeGbb0C6e1g4P1wRI2iL5yLf/LUOWWbLiCa8ImDKNT2V2OQw==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2024-09-23T20:46:34Z"
+    mac: ENC[AES256_GCM,data:bdM7zuVu2VOxYACn+yNel0eUOrprDXZwNTBytzvhhm/4w53mylNpSVFxI4Eq7bnSUWmjnPceg25+7B/EvS6NClKul+n8WKa+Z8O4OCCTsvFYTMkaBMDr3bsaazfdKBrR9Nd18cHHTy1caRJDrFNDzHCNwAGQalwAXAt+biE0cJE=,iv:dswTDf7mYxzYeTKj3dAApvcFP6CwzRVGpfihqKYBeQQ=,tag:lZzKVIJ1JFCStmeQuO+Gpg==,type:str]
+    pgp: []
+    unencrypted_regex: ^(apiVersion|metadata|kind|type)$
+    version: 3.9.0

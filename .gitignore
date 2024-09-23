@@ -3,3 +3,7 @@ secrets.yaml
 terraform.tfvars
 s3_env.yaml
 .terraform
+
+# General unencrypted secrets
+secret.yaml
+users-database.yaml
