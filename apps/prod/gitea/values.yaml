@@ -1,0 +1,70 @@
+redis-cluster:
+  enabled: false
+postgresql-ha:
+  enabled: false
+postgresql:
+  enabled: true
+  image:
+    registry: docker.io
+    repository: bitnami/postgresql
+    tag: 15.3.0-debian-11-r24
+    digest: sha256:fff6086d557d962422c6d751b6723877642170bbcc25d6f23e5c2c2f079987d5
+  primary:
+    persistence:
+      storageClass: retain-local-path
+
+persistence:
+  enabled: true
+  storageClass: retain-local-path
+
+image:
+  rootless: true
+
+gitea:
+  admin:
+    existingSecret: gitea-admin-secret
+    email: "admin@example.com"
+  config:
+    actions:
+      ENABLED: true
+    federation:
+      ENABLED: true
+    database:
+      DB_TYPE: postgres
+    session:
+      PROVIDER: db
+    cache:
+      ADAPTER: memory
+    queue:
+      TYPE: channel
+    server:
+      BUILTIN_SSH_SERVER_USER: git
+      ROOT_URL: https://git.example.com
+      DOMAIN: git.example.com
+      SSH_CREATE_AUTHORIZED_KEYS_FILE: false
+      LANDING_PAGE: explore
+    service:
+      REGISTER_MANUAL_CONFIRM: true
+    indexer:
+      ISSUE_INDEXER_TYPE: bleve
+      REPO_INDEXER_ENABLED: true
+
+service:
+  http:
+    type: ClusterIP
+    port: 3000
+    clusterIP:
+  ssh:
+    type: ClusterIP
+    port: 22
+
+podSecurityContext:
+  fsGroup: 1001
+
+containerSecurityContext:
+  runAsGroup: 1001
+  runAsNonRoot: true
+  runAsUser: 1001
+
+test:
+  enabled: false
