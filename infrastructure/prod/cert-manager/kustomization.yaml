@@ -5,3 +5,4 @@ resources:
   - ../../base/cert-manager
   - secret.enc.yaml
   - issuer.yaml
+  - release.yaml
