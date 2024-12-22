@@ -1,3 +1,4 @@
+# /infrastructure/prod/authelia/forward-auth-middleware.yaml
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
