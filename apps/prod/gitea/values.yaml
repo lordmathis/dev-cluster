@@ -1,3 +1,4 @@
+# /apps/prod/gitea/values.yaml
 redis-cluster:
   enabled: false
 postgresql-ha:
