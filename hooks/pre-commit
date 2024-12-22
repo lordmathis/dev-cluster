@@ -1,0 +1,57 @@
+#!/bin/bash
+
+# Exit on error
+set -e
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+
+# Function to check if a file is SOPS encrypted
+is_sops_encrypted() {
+    local file="$1"
+    # Check for SOPS encryption header
+    grep -q "^sops:" "$file" && grep -q "encrypted_suffix\|encrypted_regex\|mac" "$file"
+}
+
+# Get all staged YAML files
+staged_files=$(git diff --cached --name-only --diff-filter=ACM | grep '\.yaml$' || true)
+
+if [ -z "$staged_files" ]; then
+    exit 0
+fi
+
+error_found=false
+
+for file in $staged_files; do
+    # Skip already encrypted files
+    if [[ "$file" == *.enc.yaml ]]; then
+        continue
+    fi
+
+    # Check if the file matches secret patterns
+    if [[ "$file" =~ (secret|secrets|users-database|credentials|auth|key)\.yaml$ ]]; then
+        if [ ! -f "${file%%.yaml}.enc.yaml" ]; then
+            echo -e "${RED}Error: $file appears to be a secret file but has no encrypted counterpart (.enc.yaml)${NC}"
+            error_found=true
+            continue
+        fi
+
+        # Check if the unencrypted file is actually encrypted
+        if is_sops_encrypted "$file"; then
+            echo -e "${RED}Error: $file appears to be encrypted but doesn't follow .enc.yaml naming convention${NC}"
+            error_found=true
+            continue
+        fi
+    fi
+done
+
+if [ "$error_found" = true ]; then
+    echo -e "\n${RED}Commit aborted: Please encrypt secret files using SOPS and rename them with .enc.yaml extension${NC}"
+    echo -e "You can encrypt a file using:"
+    echo -e "  sops -e secret.yaml > secret.enc.yaml"
+    exit 1
+fi
+
+exit 0
