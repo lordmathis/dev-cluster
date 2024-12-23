@@ -89,6 +89,7 @@ Provisioning, configuration and manifests for my Kubernetes dev cluster on Hetzn
    Use the key generated in step 1. of the deployment
 
    ```bash
+   kubectl create ns flux-system
    cat age.key | kubectl create secret generic sops-age \
    --namespace=flux-system \
    --from-file=age.key=/dev/stdin
@@ -96,6 +97,6 @@ Provisioning, configuration and manifests for my Kubernetes dev cluster on Hetzn
 
 3. **Bootstrap flux**
 
-   ```
-   export GITHUB_TOKEN=${github_token} && flux bootstrap github --owner=${github_username} --repository=${github_repo} --path=clusters/prod --personal'
+   ```   
+   export GITHUB_TOKEN=${github_token} && flux bootstrap github --owner=${github_username} --repository=${github_repo} --path=clusters/prod --personal
    ```
