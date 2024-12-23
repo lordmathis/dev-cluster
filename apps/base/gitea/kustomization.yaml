@@ -6,4 +6,3 @@ namespace: gitea
 resources:
   - namespace.yaml
   - repository.yaml
-  - release.yaml

@@ -15,6 +15,3 @@ configMapGenerator:
     namespace: auth
     files:
       - values.yaml
-
-patchesStrategicMerge:
-  - release.yaml
