@@ -12,19 +12,22 @@ Provisioning, configuration and manifests for my Kubernetes dev cluster on Hetzn
 - A GitHub account and personal access token (for Flux)
 - S3 compatible storage credentials
 
-## Setup Steps
+## Deployment
 
 1. **Generate an Age key:**
+
    ```
    age-keygen -o key.txt
    ```
 
 2. **Edit `.sops.yaml` file in your project root:**
+
    ```yaml
    creation_rules:
      - unencrypted_regex: "^(apiVersion|metadata|kind|type)$"
        age: <your-age-public-key>
    ```
+
    Replace `<your-age-public-key>` with the public key from your `key.txt` file.
 
 3. **Create a `secrets.yaml` file with your sensitive data:**
@@ -39,14 +42,16 @@ Provisioning, configuration and manifests for my Kubernetes dev cluster on Hetzn
    ```
 
 4. **Encrypt the secrets file:**
+
    ```
    sops -e secrets.yaml > secrets.enc.yaml
    ```
 
-5. **Create a `terraform.tfvars` file for your Hetzner Cloud token:**
+5. **Create a `terraform.tfvars` file for your Hetzner Cloud token and Cloudflare Token:**
+
    ```hcl
    hcloud_token = "your-hetzner-cloud-token"
-
+   cloudflare_api_token = "your-cloudflare-token
    ```
 
 6. **Create `s3_env.yaml` file with your S3 compatible storage credentials**
@@ -57,18 +62,40 @@ Provisioning, configuration and manifests for my Kubernetes dev cluster on Hetzn
    `AWS_SECRET_ACCESS_KEY`
 
 7. **Encrypt the `s3_env.yaml` file:**
-   ```
+
+   ```bash
    sops -e s3_env.yaml > s3_env.enc.yaml
    ```
 
-6. **Initialize OpenTofu:**
+8. **Run OpenTofu:**
 
    ```bash
    sops exec-env s3_env.enc.yaml 'tofu init'
+   sops exec-env s3_env.enc.yaml 'tofu apply'
    ```
 
+## Post Deployment
+
+1. **Connect to the server**
+
+   Replace username with your username and public ip with the output value of `tofu apply`
+
    ```bash
-   tofu init
-   tofu plan
-   tofu apply
+   ssh ${username}@${public_ip}
+   ```
+
+2. **Create sops secret**
+
+   Use the key generated in step 1. of the deployment
+
+   ```bash
+   cat age.key | kubectl create secret generic sops-age \
+   --namespace=flux-system \
+   --from-file=age.key=/dev/stdin
+   ```
+
+3. **Bootstrap flux**
+
+   ```
+   export GITHUB_TOKEN=${github_token} && flux bootstrap github --owner=${github_username} --repository=${github_repo} --path=clusters/prod --personal'
    ```
