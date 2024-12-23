@@ -4,17 +4,17 @@ package_upgrade: true
 package_reboot_if_required: true
 
 users:
-- name: ${username}
-  groups: [ sudo ]
-  shell: /usr/bin/zsh
-  hashed_passwd: ${user_hashed_password}
-  lock_passwd: false
-  ssh_authorized_keys:
-  %{ for key in user_ssh_public_keys ~}
-    - ${key}
-  %{ endfor ~}
-- name: git
-  lock_passwd: true
+  - name: ${username}
+    groups: [sudo]
+    shell: /usr/bin/zsh
+    hashed_passwd: ${user_hashed_password}
+    lock_passwd: false
+    ssh_authorized_keys:
+%{ for key in user_ssh_public_keys ~}
+      - ${key}
+%{ endfor ~}
+  - name: git
+    lock_passwd: true
 
 packages:
   - apt-transport-https
@@ -34,18 +34,18 @@ write_files:
   - content: |
       #!/bin/sh
       GITEA_POD=$(kubectl --kubeconfig /home/git/.kube/config get po -n gitea -l app=gitea -o name --no-headers=true | cut -d'/' -f2)
-      kubectl --kubeconfig /home/git/.kube/config exec -i -n gitea $GITEA_POD -c gitea -- env SSH_ORIGINAL_COMMAND="$SSH_ORIGINAL_COMMAND" /bin/sh "$@"      
+      kubectl --kubeconfig /home/git/.kube/config exec -i -n gitea $GITEA_POD -c gitea -- env SSH_ORIGINAL_COMMAND="$SSH_ORIGINAL_COMMAND" /bin/sh "$@"
     path: /usr/local/bin/gitea-shell
-    permissions: '0755'
+    permissions: "0755"
   - content: |
       #!/bin/sh
       GITEA_POD=$(kubectl --kubeconfig /home/git/.kube/config get po -n gitea -l app=gitea -o name --no-headers=true | cut -d'/' -f2)
-      kubectl --kubeconfig /home/git/.kube/config exec -i -n gitea $GITEA_POD -c gitea -- /usr/local/bin/gitea keys -e git -u $1 -t $2 -k $3      
-    permissions: '0755'
+      kubectl --kubeconfig /home/git/.kube/config exec -i -n gitea $GITEA_POD -c gitea -- /usr/local/bin/gitea keys -e git -u $1 -t $2 -k $3
+    permissions: "0755"
     path: /usr/local/bin/gitea-keys
 
 ssh:
-  emit_keys_to_console: false
+  emit_keys_to_console: true
 ssh_pwauth: false
 disable_root: true
 
@@ -77,7 +77,13 @@ runcmd:
   - chown -R ${username}:${username} /home/${username}/.kube
   - chmod 600 /home/${username}/.kube/config
   # Dotfiles
-  - su ${username} -c 'curl https://raw.githubusercontent.com/LordMathis/dotfiles/main/install.sh | /usr/bin/zsh -s -- server'
+  - |
+    su ${username} -c '
+    cd /home/${username}
+    curl -fsSL https://raw.githubusercontent.com/LordMathis/dotfiles/main/install.sh > /tmp/install_dotfiles.sh
+    chmod +x /tmp/install_dotfiles.sh
+    /tmp/install_dotfiles.sh server
+    '
   # Helm
   - curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
   - chmod 700 get_helm.sh
@@ -87,10 +93,9 @@ runcmd:
   - mv kustomize /usr/local/bin/
   - chmod +x /usr/local/bin/kustomize
   # Sops
-  - curl -LO https://github.com/getsops/sops/releases/download/v3.9.0/sops-v3.9.0.linux.amd64
-  - mv sops-v3.9.0.linux.amd64 /usr/local/bin/sops
+  - curl -LO https://github.com/getsops/sops/releases/download/v3.9.0/sops-v3.9.2.linux.amd64
+  - mv sops-v3.9.2.linux.amd64 /usr/local/bin/sops
   - chmod +x /usr/local/bin/sops
-  # Install and bootstrap Flux
+  # Install and Flux
   - curl -s https://fluxcd.io/install.sh | bash
-  - su ${username} -c 'export GITHUB_TOKEN=${github_token} && flux bootstrap github --owner=${github_username} --repository=${github_repo} --path=clusters/prod --personal'
 final_message: "The system is finally up, after $UPTIME seconds"
