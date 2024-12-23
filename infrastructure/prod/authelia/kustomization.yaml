@@ -4,6 +4,7 @@ kind: Kustomization
 namespace: auth
 
 resources:
+  - ../../base/authelia
   - release.yaml
   - ingress.yaml
   - forward-auth-middleware.yaml
