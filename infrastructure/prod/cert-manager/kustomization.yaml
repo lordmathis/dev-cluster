@@ -6,3 +6,6 @@ resources:
   - secret.enc.yaml
   - issuer.yaml
   - release.yaml
+
+patchesStrategicMerge:
+  - release.yaml
