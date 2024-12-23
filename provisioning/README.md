@@ -90,9 +90,9 @@ Provisioning, configuration and manifests for my Kubernetes dev cluster on Hetzn
 
    ```bash
    kubectl create ns flux-system
-   cat age.key | kubectl create secret generic sops-age \
+   echo 'AGE-SECRET-KEY-...' | kubectl create secret generic sops-age \
    --namespace=flux-system \
-   --from-file=age.key=/dev/stdin
+   --from-file=age.agekey=/dev/stdin
    ```
 
 3. **Bootstrap flux**
