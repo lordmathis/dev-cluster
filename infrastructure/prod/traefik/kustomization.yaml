@@ -10,6 +10,3 @@ configMapGenerator:
     namespace: traefik
     files:
       - values.yaml
-
-patchesStrategicMerge:
-  - release.yaml

@@ -6,4 +6,3 @@ namespace: traefik
 resources:
   - namespace.yaml
   - repository.yaml
-  - release.yaml
