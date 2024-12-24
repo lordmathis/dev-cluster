@@ -1,0 +1,15 @@
+# /apps/prod/authelia/forward-auth-middleware.yaml
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: authelia
+  namespace: auth
+spec:
+  forwardAuth:
+    address: 'http://authelia.auth.svc.cluster.local/api/verify?rd=https://auth.example.com'
+    trustForwardHeader: true
+    authResponseHeaders:
+    - "Remote-User"
+    - "Remote-Groups"
+    - "Remote-Email"
+    - "Remote-Name"

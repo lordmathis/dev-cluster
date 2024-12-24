@@ -1,0 +1,15 @@
+# /apps/prod/authelia/ingress.yaml
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: authelia-ingress
+  namespace: auth
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`auth.example.com`)
+    kind: Rule
+    services:
+    - name: authelia
+      port: 80

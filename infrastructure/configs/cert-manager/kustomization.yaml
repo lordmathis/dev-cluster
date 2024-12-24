@@ -1,0 +1,7 @@
+# /infrastructure/configs/cert-manager/kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - cloudflare-secret.enc.yaml
+  - issuer.yaml
+  - certificate.yaml

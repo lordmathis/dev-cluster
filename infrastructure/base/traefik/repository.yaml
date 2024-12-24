@@ -1,9 +1,0 @@
-# /infrastructure/base/traefik/repository.yaml
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
-metadata:
-  name: traefik-helm-repo
-  namespace: traefik
-spec:
-  interval: 24h
-  url: https://helm.traefik.io/traefik
