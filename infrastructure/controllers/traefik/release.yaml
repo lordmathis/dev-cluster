@@ -16,4 +16,4 @@ spec:
       interval: 10m
   valuesFrom:
     - kind: ConfigMap
-      name: traefik-prod-values
+      name: $(traefik-prod-values)

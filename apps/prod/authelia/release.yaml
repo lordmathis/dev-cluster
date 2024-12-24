@@ -17,4 +17,4 @@ spec:
       interval: 12h
   valuesFrom:
     - kind: ConfigMap
-      name: authelia-prod-values
+      name: $(authelia-prod-values)
