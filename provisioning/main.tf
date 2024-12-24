@@ -126,6 +126,14 @@ resource "cloudflare_record" "cluster" {
   proxied = false
 }
 
+resource "cloudflare_record" "cluster_wildcard" {
+  zone_id = data.cloudflare_zones.domain.zones[0].id
+  name    = "*"
+  value   = hcloud_server.cluster.ipv4_address
+  type    = "A"
+  proxied = false
+}
+
 output "server_ip" {
   value = hcloud_server.cluster.ipv4_address
 }
