@@ -4,8 +4,8 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - repository.yaml
-  - release.yaml
   - crds.yaml
+  - release.yaml
 
 configMapGenerator:
   - name: traefik-prod-values
