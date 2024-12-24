@@ -17,4 +17,4 @@ spec:
       interval: 1h
   valuesFrom:
     - kind: ConfigMap
-      name: $(gitea-prod-values)
+      name: gitea-prod-values

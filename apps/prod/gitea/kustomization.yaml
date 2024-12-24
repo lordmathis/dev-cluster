@@ -12,5 +12,7 @@ resources:
 configMapGenerator:
   - name: gitea-prod-values
     namespace: gitea
+    options:
+      disableNameSuffixHash: true
     files:
       - values.yaml
