@@ -1,8 +1,0 @@
-# /infrastructure/prod/kustomization.yaml
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-resources:
-  - ../base/storage-class
-  - authelia
-  - cert-manager
-  - traefik
