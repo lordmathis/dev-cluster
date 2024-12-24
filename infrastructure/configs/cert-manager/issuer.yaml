@@ -7,6 +7,8 @@ spec:
   acme:
     email: namesny.matus@gmail.com
     server: https://acme-staging-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: cloudflare-prod-issuer-account-key 
     solvers:
     - dns01:
         cloudflare:
