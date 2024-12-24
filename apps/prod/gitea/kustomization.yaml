@@ -4,7 +4,7 @@ kind: Kustomization
 namespace: gitea
 
 resources:
-  - ../base/gitea
+  - ../../base/gitea
   - secret.enc.yaml
   - release.yaml
   - ingress.yaml
