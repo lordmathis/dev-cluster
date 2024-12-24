@@ -36,9 +36,6 @@ Provisioning, configuration and manifests for my Kubernetes dev cluster on Hetzn
    username: <your-username>
    user_hashed_password: <your-hashed-password>
    user_ssh_public_key: <your-ssh-public-key>
-   github_username: <your-github-username>
-   github_repo: <your-flux-repo-name>
-   github_token: <your-github-token>
    ```
 
 4. **Encrypt the secrets file:**

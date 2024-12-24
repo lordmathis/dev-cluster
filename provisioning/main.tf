@@ -51,9 +51,6 @@ data "cloudinit_config" "k8s_node" {
         for key in split("\n", data.sops_file.secrets.data["user_ssh_public_keys"]) :
         key if trimspace(key) != ""
       ]
-      github_username = data.sops_file.secrets.data["github_username"]
-      github_repo     = data.sops_file.secrets.data["github_repo"]
-      github_token    = data.sops_file.secrets.data["github_token"]
     })
   }
 }
@@ -146,9 +143,6 @@ output "cloud_init_raw" {
       for key in split("\n", data.sops_file.secrets.data["user_ssh_public_keys"]) :
       key if trimspace(key) != ""
     ]
-    github_username = data.sops_file.secrets.data["github_username"]
-    github_repo     = data.sops_file.secrets.data["github_repo"]
-    github_token    = data.sops_file.secrets.data["github_token"]
   })
   sensitive = true
 }
