@@ -16,6 +16,10 @@ configMap:
   session:
     redis:
       enabled: false
+    cookies:
+      - domain: 'nmnsy.dev'
+        authelia_url: 'https://auth.nmsny.dev'
+        name: 'authelia_session'
   storage:
     local:
       enabled: true
