@@ -13,7 +13,8 @@ resources:
 configMapGenerator:
   - name: authelia-prod-values
     namespace: auth
-    options:
-      disableNameSuffixHash: true
     files:
       - values.yaml
+
+configurations:
+  - kustomizeconfig.yaml

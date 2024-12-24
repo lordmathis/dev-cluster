@@ -10,7 +10,8 @@ resources:
 configMapGenerator:
   - name: traefik-prod-values
     namespace: traefik
-    options:
-      disableNameSuffixHash: true
     files:
       - values.yaml
+
+configurations:
+  - kustomizeconfig.yaml
