@@ -11,4 +11,4 @@ spec:
     - "*.example.com"
   issuerRef:
     name: cloudflare-prod
-    kind: Issuer
+    kind: ClusterIssuer
