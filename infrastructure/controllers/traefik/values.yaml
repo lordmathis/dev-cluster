@@ -7,9 +7,9 @@ ingressRoute:
     enabled: true
     matchRule: Host(`traefik.example.com`)
     entryPoints: ["websecure"]
-    middlewares:
-      - name: "authelia@kubernetescrd"
-      - namespace: "auth"
+    # middlewares:
+    #   - name: "authelia@kubernetescrd"
+    #   - namespace: "auth"
 providers:
   kubernetesCRD:
     allowCrossNamespace: true
