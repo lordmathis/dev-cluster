@@ -1,4 +1,4 @@
-# Dev-Cluster GitOps Provisioning
+# Dev-Cluster
 
 Provisioning, configuration and manifests for my Kubernetes dev cluster on Hetzner Cloud, set up for GitOps with Flux CD.
 
@@ -20,7 +20,7 @@ Provisioning, configuration and manifests for my Kubernetes dev cluster on Hetzn
    age-keygen -o key.txt
    ```
 
-2. **Edit `.sops.yaml` file in your project root:**
+2. **Edit `.sops.yaml` file in project root:**
 
    ```yaml
    creation_rules:
@@ -32,10 +32,16 @@ Provisioning, configuration and manifests for my Kubernetes dev cluster on Hetzn
 
 3. **Create a `secrets.yaml` file with your sensitive data:**
 
+   ```bash
+   cd provisioning
+   ```
+
    ```yaml
    username: <your-username>
    user_hashed_password: <your-hashed-password>
-   user_ssh_public_key: <your-ssh-public-key>
+   user_ssh_public_keys: |
+      <your-ssh-public-key>
+   domain_name: <your-domain-name>
    ```
 
 4. **Encrypt the secrets file:**
@@ -94,6 +100,9 @@ Provisioning, configuration and manifests for my Kubernetes dev cluster on Hetzn
 
 3. **Bootstrap flux**
 
-   ```   
-   export GITHUB_TOKEN=${github_token} && flux bootstrap github --owner=${github_username} --repository=${github_repo} --path=clusters/prod --personal
+   ```bash
+   export GITHUB_TOKEN=your_github_token
+   export GITHUB_USERNAME=your_github_username
+   export GITHUB_REPO=your_github_repo
+   flux bootstrap github --owner=$GITHUB_USERNAME --repository=$GITHUB_REPO --path=clusters/prod --personal
    ```
