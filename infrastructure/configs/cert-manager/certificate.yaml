@@ -11,4 +11,4 @@ spec:
     - "*.nmsny.dev"
   issuerRef:
     name: cloudflare-prod
-    kind: Issuer
+    kind: ClusterIssuer
