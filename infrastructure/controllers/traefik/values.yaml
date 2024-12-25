@@ -1,23 +1,15 @@
 # /infrastructure/controllers/traefik/values.yaml
-deployment:
-  additionalVolumes:
-  - name: access-log
-    hostPath:
-      path:  /var/log/traefik/
-additionalVolumeMounts:
-- name: access-log
-  mountPath: /var/log/traefik/
 logs:
   access:
     enabled: true
-    filePath: /var/log/traefik/access.log
 ingressRoute:
   dashboard:
     enabled: true
     matchRule: Host(`traefik.nmsny.dev`)
     entryPoints: ["websecure"]
     middlewares:
-      - name: "auth-authelia@kubernetescrd"
+      - name: "authelia@kubernetescrd"
+      - namespace: "auth"
 providers:
   kubernetesCRD:
     allowCrossNamespace: true
