@@ -1,0 +1,16 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: k9s-ingress
+  namespace: k9s
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`k9s.example.com`)
+    kind: Rule
+    middlewares:
+    - name: "auth-authelia@kubernetescrd"
+    services:
+    - name: k9s-svc
+      port: 7681
