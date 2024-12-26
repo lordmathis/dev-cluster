@@ -49,6 +49,7 @@ ingress:
     middlewares:
       auth:
         nameOverride: "authelia"
+        endpointOverride: '?authelia_url=https://auth.nmsny.dev'
         authResponseHeaders:
           - "Remote-User"
           - "Remote-Groups"
