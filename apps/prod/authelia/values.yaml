@@ -13,6 +13,11 @@ configMap:
     rules:
       - domain: '*.example.com'
         policy: one_factor
+  server:
+    endpoints:
+      authz:
+        forward-auth:
+          implementation: 'ForwardAuth'
   session:
     redis:
       enabled: false
@@ -49,7 +54,6 @@ ingress:
     middlewares:
       auth:
         nameOverride: "authelia"
-        endpointOverride: '?authelia_url=https://auth.example.com'
         authResponseHeaders:
           - "Remote-User"
           - "Remote-Groups"
