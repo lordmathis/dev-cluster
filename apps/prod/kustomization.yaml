@@ -4,3 +4,4 @@ kind: Kustomization
 resources:
   - authelia
   - gitea
+  - k9s-web
