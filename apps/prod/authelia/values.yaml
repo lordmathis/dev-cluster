@@ -51,14 +51,6 @@ ingress:
   ingressClassName: "traefik"
   traefikCRD:
     enabled: true
-    middlewares:
-      auth:
-        nameOverride: "authelia"
-        authResponseHeaders:
-          - "Remote-User"
-          - "Remote-Groups"
-          - "Remote-Email"
-          - "Remote-Name"
     matchOverride: Host(`auth.example.com`)
     entryPoints:
       - "websecure"

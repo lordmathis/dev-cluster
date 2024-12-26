@@ -5,8 +5,9 @@ namespace: auth
 
 resources:
   - ../../base/authelia
-  - release.yaml
   - users-database.enc.yaml
+  - release.yaml
+  - forward-auth-middleware.yaml
 
 configMapGenerator:
   - name: authelia-prod-values
