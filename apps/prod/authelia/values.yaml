@@ -13,6 +13,11 @@ configMap:
     rules:
       - domain: '*.nmsny.dev'
         policy: one_factor
+  server:
+    endpoints:
+      authz:
+        forward-auth:
+          implementation: 'ForwardAuth'
   session:
     redis:
       enabled: false
@@ -49,7 +54,6 @@ ingress:
     middlewares:
       auth:
         nameOverride: "authelia"
-        endpointOverride: '?authelia_url=https://auth.nmsny.dev'
         authResponseHeaders:
           - "Remote-User"
           - "Remote-Groups"
