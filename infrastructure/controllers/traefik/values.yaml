@@ -8,7 +8,7 @@ ingressRoute:
     matchRule: Host(`traefik.nmsny.dev`)
     entryPoints: ["websecure"]
     middlewares:
-      - name: "auth-authelia@kubernetescrd"
+      - name: "auth-forwardauth-authelia@kubernetescrd"
 providers:
   kubernetesCRD:
     allowCrossNamespace: true
