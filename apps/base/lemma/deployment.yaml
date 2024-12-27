@@ -39,8 +39,8 @@ spec:
             secretKeyRef:
               name: lemma-secrets
               key: jwt-signing-key
-        - name: LEMMA_LOG_LEVEL
-          value: "debug"
+        - name: LEMMA_DB_PATH
+          value: /data/lemma.db
         volumeMounts:
         - name: lemma-data
           mountPath: /data
