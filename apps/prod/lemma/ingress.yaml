@@ -10,5 +10,5 @@ spec:
     - match: Host(`lemma.example.com`)
       kind: Rule
       services:
-        - name: lemma
+        - name: lemma-http
           port: 80
