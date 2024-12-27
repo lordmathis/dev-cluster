@@ -1,0 +1,14 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: lemma
+  namespace: lemma
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`lemma.example.com`)
+      kind: Rule
+      services:
+        - name: lemma
+          port: 80

@@ -1,0 +1,48 @@
+# /app/base/lemma/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lemma
+  namespace: lemma
+spec:
+  selector:
+    matchLabels:
+      app: lemma
+  template:
+    metadata:
+      labels:
+        app: lemma
+    spec:
+      containers:
+      - name: lemma
+        image: ghcr.io/lordmathis/lemma:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: LEMMA_ADMIN_EMAIL
+          valueFrom:
+            secretKeyRef:
+              name: lemma-secrets
+              key: admin-email
+        - name: LEMMA_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: lemma-secrets
+              key: admin-password
+        - name: LEMMA_ENCRYPTION_KEY
+          valueFrom:
+            secretKeyRef:
+              name: lemma-secrets
+              key: encryption-key
+        - name: LEMMA_JWT_SIGNING_KEY
+          valueFrom:
+            secretKeyRef:
+              name: lemma-secrets
+              key: jwt-signing-key
+        volumeMounts:
+        - name: lemma-data
+          mountPath: /data
+      volumes:
+      - name: lemma-data
+        persistentVolumeClaim:
+          claimName: lemma-pvc

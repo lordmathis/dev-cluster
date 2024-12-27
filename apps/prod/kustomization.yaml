@@ -5,3 +5,4 @@ resources:
   - authelia
   - gitea
   - k9s-web
+  - lemma
