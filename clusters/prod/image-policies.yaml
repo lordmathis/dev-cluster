@@ -2,20 +2,13 @@
 apiVersion: image.toolkit.fluxcd.io/v1beta2
 kind: ImagePolicy
 metadata:
-  name: app-policy
-spec:
-  policy:
-    pinDigests: true
----
-apiVersion: image.toolkit.fluxcd.io/v1beta2
-kind: ImagePolicy
-metadata:
   name: postgresql
   namespace: gitea
 spec:
   imageRepositoryRef:
     name: postgresql
   policy:
+    pinDigests: true
     semver:
       range: '>=15.3.0 <16.0.0'
 ---
@@ -28,6 +21,7 @@ spec:
   imageRepositoryRef:
     name: lemma
   policy:
+    pinDigests: true
     semver:
       range: '>=0.4.1 <1.0.0'
 ---
@@ -40,6 +34,7 @@ spec:
   imageRepositoryRef:
     name: k9s-web
   policy:
+    pinDigests: true
     semver:
       range: '>=0.4.0 <1.0.0'
 ---
