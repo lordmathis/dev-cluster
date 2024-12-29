@@ -1,0 +1,28 @@
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: postgresql
+  namespace: gitea
+spec:
+  image: docker.io/bitnami/postgresql
+  interval: 1h
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: lemma
+  namespace: lemma
+spec:
+  image: ghcr.io/lordmathis/lemma
+  interval: 5m
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: k9s-web
+  namespace: k9s
+spec:
+  image: ghcr.io/lordmathis/k9s-web
+  interval: 5m
+---
