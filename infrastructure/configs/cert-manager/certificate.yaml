@@ -7,8 +7,8 @@ metadata:
 spec:
   secretName: wildcard-nmsny-dev-tls
   dnsNames:
-    - "nmsny.dev"
-    - "*.nmsny.dev"
+    - "${DOMAIN}"
+    - "*.{DOMAIN}"
   issuerRef:
     name: cloudflare-prod
     kind: ClusterIssuer

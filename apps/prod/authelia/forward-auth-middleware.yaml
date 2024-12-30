@@ -6,7 +6,7 @@ metadata:
   namespace: auth
 spec:
   forwardAuth:
-    address: 'http://authelia.auth.svc.cluster.local/api/authz/forward-auth?authelia_url=https%3A%2F%2Fauth.nmsny.dev'
+    address: 'http://authelia.auth.svc.cluster.local/api/authz/forward-auth?authelia_url=https%3A%2F%2F${AUTHELIA_DOMAIN}'
     trustForwardHeader: true
     authResponseHeaders:
     - "Remote-User"

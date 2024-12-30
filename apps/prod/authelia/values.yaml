@@ -1,5 +1,5 @@
 # /apps/prod/authelia/values.yaml
-domain: 'nmsny.dev'
+domain: '${DOMAIN}'
 configMap:
   authentication_backend:
     file:
@@ -11,7 +11,7 @@ configMap:
       enabled: false
   access_control:
     rules:
-      - domain: '*.nmsny.dev'
+      - domain: '*.${DOMAIN}'
         policy: one_factor
   server:
     endpoints:
@@ -22,8 +22,8 @@ configMap:
     redis:
       enabled: false
     cookies:
-      - domain: 'nmsny.dev'
-        authelia_url: 'https://auth.nmsny.dev'
+      - domain: '${DOMAIN}'
+        authelia_url: 'https://${AUTHELIA_DOMAIN}'
         name: 'authelia_session'
   storage:
     local:
@@ -51,6 +51,6 @@ ingress:
   ingressClassName: "traefik"
   traefikCRD:
     enabled: true
-    matchOverride: Host(`auth.nmsny.dev`)
+    matchOverride: Host(`${AUTHELIA_DOMAIN}`)
     entryPoints:
       - "websecure"
