@@ -9,6 +9,8 @@ spec:
   interval: 10m0s
   path: ./infrastructure/core
   prune: true
+  dependsOn:
+    - name: cluster-vars
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -46,3 +48,7 @@ spec:
     provider: sops
     secretRef:
       name: sops-age
+  postBuild:
+    substituteFrom:
+      - kind: Secret
+        name: cluster-vars-prod
