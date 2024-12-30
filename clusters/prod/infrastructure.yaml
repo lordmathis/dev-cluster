@@ -9,8 +9,6 @@ spec:
   interval: 10m0s
   path: ./infrastructure/core
   prune: true
-  dependsOn:
-    - name: cluster-vars
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -28,7 +26,12 @@ spec:
     kind: GitRepository
     name: flux-system
   dependsOn:
+    - name: cluster-vars
     - name: infrastructure-core
+  postBuild:
+    substituteFrom:
+      - kind: Secret
+        name: cluster-vars-prod
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -43,6 +46,7 @@ spec:
     kind: GitRepository
     name: flux-system
   dependsOn:
+    - name: cluster-vars
     - name: infrastructure-controllers
   decryption:
     provider: sops
