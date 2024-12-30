@@ -7,7 +7,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`lemma.example.com`)
+    - match: Host(`${LEMMA_DOMAIN}`)
       kind: Rule
       services:
         - name: lemma-http

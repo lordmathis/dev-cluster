@@ -8,7 +8,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-  - match: Host(`git.example.com`)
+  - match: Host(`${GITEA_DOMAIN}`)
     kind: Rule
     services:
     - name: gitea-http

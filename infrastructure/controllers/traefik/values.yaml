@@ -5,7 +5,7 @@ logs:
 ingressRoute:
   dashboard:
     enabled: true
-    matchRule: Host(`traefik.example.com`)
+    matchRule: Host(`${TRAEFIK_DOMAIN}`)
     entryPoints: ["websecure"]
     middlewares:
       - name: "auth-authelia@kubernetescrd"

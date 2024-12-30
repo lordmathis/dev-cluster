@@ -7,7 +7,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-  - match: Host(`k9s.example.com`)
+  - match: Host(`${K9S_DOMAIN}`)
     kind: Rule
     middlewares:
     - name: "auth-authelia@kubernetescrd"
