@@ -104,5 +104,9 @@ Provisioning, configuration and manifests for my Kubernetes dev cluster on Hetzn
    export GITHUB_TOKEN=your_github_token
    export GITHUB_USERNAME=your_github_username
    export GITHUB_REPO=your_github_repo
-   flux bootstrap github --owner=$GITHUB_USERNAME --repository=$GITHUB_REPO --path=clusters/prod --personal
+   flux bootstrap github \
+      --owner=$GITHUB_USERNAME \
+      --repository=$GITHUB_REPO \
+      --components-extra=image-reflector-controller,image-automation-controller \
+      --path=clusters/prod --personal
    ```

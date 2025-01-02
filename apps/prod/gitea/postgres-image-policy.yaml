@@ -1,0 +1,12 @@
+# /apps/prod/gitea/postgres-image-policy.yaml
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImagePolicy
+metadata:
+  name: postgresql
+  namespace: gitea
+spec:
+  imageRepositoryRef:
+    name: postgresql
+  policy:
+    semver:
+      range: '>=15.3.0 <16.0.0'
