@@ -142,7 +142,7 @@ resource "cloudflare_record" "caa" {
   }
 }
 
-resource "cloudflare_record" "cluster_ipv6" {
+resource "cloudflare_record" "cluster_ipv6_wildcard" {
   zone_id = data.cloudflare_zones.domain.zones[0].id
   name    = "@"
   value   = hcloud_server.cluster.ipv6_address
