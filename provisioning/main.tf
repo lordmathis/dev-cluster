@@ -131,6 +131,33 @@ resource "cloudflare_record" "cluster_wildcard" {
   proxied = false
 }
 
+resource "cloudflare_record" "caa" {
+  zone_id = data.cloudflare_zones.domain.zones[0].id
+  name    = "@"
+  type    = "CAA"
+  data {
+    flags = "0"
+    tag   = "issue"
+    value = "letsencrypt.org"
+  }
+}
+
+resource "cloudflare_record" "cluster_ipv6" {
+  zone_id = data.cloudflare_zones.domain.zones[0].id
+  name    = "@"
+  value   = hcloud_server.cluster.ipv6_address
+  type    = "AAAA"
+  proxied = false
+}
+
+resource "cloudflare_record" "cluster_ipv6" {
+  zone_id = data.cloudflare_zones.domain.zones[0].id
+  name    = "*"
+  value   = hcloud_server.cluster.ipv6_address
+  type    = "AAAA"
+  proxied = false
+}
+
 output "server_ip" {
   value = hcloud_server.cluster.ipv4_address
 }
