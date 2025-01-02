@@ -8,7 +8,6 @@ resources:
   - secret.enc.yaml
   - release.yaml
   - ingress.yaml
-  - postgres-image-policy.yaml
 
 configMapGenerator:
   - name: gitea-prod-values

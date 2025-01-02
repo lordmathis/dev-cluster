@@ -98,6 +98,10 @@ Provisioning, configuration and manifests for my Kubernetes dev cluster on Hetzn
    --from-file=age.agekey=/dev/stdin
    ```
 
+3. **Create GitHub access token**
+
+   [https://fluxcd.io/flux/installation/bootstrap/github/](https://fluxcd.io/flux/installation/bootstrap/github/)
+
 3. **Bootstrap flux**
 
    ```bash

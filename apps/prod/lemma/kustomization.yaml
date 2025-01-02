@@ -7,7 +7,6 @@ resources:
   - ../../base/lemma
   - secret.enc.yaml
   - ingress.yaml
-  - image-policy.yaml
 
 images:
   - name: ghcr.io/lordmathis/lemma

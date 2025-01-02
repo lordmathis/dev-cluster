@@ -6,4 +6,3 @@ namespace: k9s
 resources:
   - ../../base/k9s-web
   - ingress.yaml
-  - image-policy.yaml
