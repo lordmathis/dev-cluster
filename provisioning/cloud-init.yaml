@@ -43,16 +43,17 @@ write_files:
       kubectl --kubeconfig /home/git/.kube/config exec -i -n gitea $GITEA_POD -c gitea -- /usr/local/bin/gitea keys -e git -u $1 -t $2 -k $3
     permissions: "0755"
     path: /usr/local/bin/gitea-keys
+  - content: |
+      Match User git
+        AuthorizedKeysCommandUser git
+        AuthorizedKeysCommand /usr/local/bin/gitea-keys %u %t %k
+    path: /etc/ssh/sshd_config.d/50-gitea.conf
+    permissions: "0644"
 
 ssh:
   emit_keys_to_console: true
 ssh_pwauth: false
 disable_root: true
-
-ssh_config:
-  Match User git:
-    AuthorizedKeysCommandUser: git
-    AuthorizedKeysCommand: /usr/local/bin/gitea-keys %u %t %k
 
 runcmd:
   # UFW
@@ -76,6 +77,11 @@ runcmd:
   - cp /etc/rancher/k3s/k3s.yaml /home/${username}/.kube/config
   - chown -R ${username}:${username} /home/${username}/.kube
   - chmod 600 /home/${username}/.kube/config
+  # Set up kubeconfig for git
+  - mkdir -p /home/git/.kube
+  - cp /etc/rancher/k3s/k3s.yaml /home/git/.kube/config
+  - chown -R git:git /home/git/.kube
+  - chmod 600 /home/git/.kube/config
   # Dotfiles
   - |
     su ${username} -c '
