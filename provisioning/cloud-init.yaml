@@ -99,9 +99,14 @@ runcmd:
   - mv kustomize /usr/local/bin/
   - chmod +x /usr/local/bin/kustomize
   # Sops
-  - curl -LO https://github.com/getsops/sops/releases/download/v3.9.0/sops-v3.9.2.linux.amd64
-  - mv sops-v3.9.2.linux.amd64 /usr/local/bin/sops
+  - curl -LO https://github.com/getsops/sops/releases/download/v3.9.3/sops-v3.9.3.linux.amd64
+  - mv sops-v3.9.3.linux.amd64 /usr/local/bin/sops
   - chmod +x /usr/local/bin/sops
-  # Install and Flux
+  # Install Flux
   - curl -s https://fluxcd.io/install.sh | bash
+  # Install Velero
+  - curl -LO https://github.com/vmware-tanzu/velero/releases/download/v1.15.1/velero-v1.15.1-linux-amd64.tar.gz
+  - tar -xzf velero-v1.15.1-linux-amd64.tar.gz
+  - mv velero-v1.15.1-linux-amd64/velero /usr/local/bin/
+  - chmod +x /usr/local/bin/velero
 final_message: "The system is finally up, after $UPTIME seconds"
