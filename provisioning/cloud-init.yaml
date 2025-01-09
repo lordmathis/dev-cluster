@@ -90,18 +90,6 @@ runcmd:
     chmod +x /tmp/install_dotfiles.sh
     /tmp/install_dotfiles.sh server
     '
-  # Helm
-  - curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-  - chmod 700 get_helm.sh
-  - ./get_helm.sh
-  # Kustomize
-  - curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
-  - mv kustomize /usr/local/bin/
-  - chmod +x /usr/local/bin/kustomize
-  # Sops
-  - curl -LO https://github.com/getsops/sops/releases/download/v3.9.3/sops-v3.9.3.linux.amd64
-  - mv sops-v3.9.3.linux.amd64 /usr/local/bin/sops
-  - chmod +x /usr/local/bin/sops
   # Install Flux
   - curl -s https://fluxcd.io/install.sh | bash
   # Install Velero
