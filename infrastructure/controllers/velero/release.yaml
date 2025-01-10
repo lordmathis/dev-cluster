@@ -1,0 +1,86 @@
+# /infrastructure/controllers/velero/release.yaml
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: velero
+  namespace: velero
+spec:
+  interval: 1h
+  chart:
+    spec:
+      chart: velero
+      version: 8.2.0
+      sourceRef:
+        kind: HelmRepository
+        name: vmware-tanzu
+        namespace: velero
+  values:
+    # Deploy restic daemon set for volume backup
+    deployRestic: true
+
+    # Configuration settings
+    configuration:
+      provider: aws
+      
+      # Configure backup storage location
+      backupStorageLocation:
+        name: default
+        provider: aws
+        default: true
+        bucket: ${VELERO_BUCKET}
+        config:
+          region: fr-par
+          s3ForcePathStyle: true
+          s3Url: https://s3.fr-par.scw.cloud
+          publicUrl: https://s3.fr-par.scw.cloud
+
+      # Use restic for all pod volumes by default
+      defaultVolumesToRestic: true
+      
+    # Backup schedules
+    schedules:
+      daily-backup:
+        schedule: "0 2 * * *"  # Every day at 2 AM
+        template:
+          includedNamespaces:
+            - gitea
+          storageLocation: default
+          ttl: "168h"  # Keep backups for 1 week
+          includedResources:
+            - persistentvolumeclaims
+            - persistentvolumes
+          labels:
+            type: scheduled
+            period: daily
+
+    # Resource requests and limits
+    resources:
+      requests:
+        cpu: 200m
+        memory: 256Mi
+      limits:
+        cpu: 1000m
+        memory: 512Mi
+
+    # Credentials from a pre-existing secret
+    credentials:
+      existingSecret: velero-s3-credentials
+
+    # Configure restic settings
+    restic:
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+        limits:
+          cpu: 500m
+          memory: 256Mi
+
+    # Configure init containers resources
+    initContainers:
+      - name: velero-plugin-for-aws
+        image: velero/velero-plugin-for-aws:v1.11.1
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+          - mountPath: /target
+            name: plugins
