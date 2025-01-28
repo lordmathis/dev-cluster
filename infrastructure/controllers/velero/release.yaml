@@ -15,11 +15,10 @@ spec:
         name: velero-helm-repo
         namespace: velero
   values:
-    deployRestic: true
+    deploNodeAgent: true
     configuration:
-      provider: aws
       backupStorageLocation:
-        name: default
+      - name: default
         provider: aws
         default: true
         bucket: ${VELERO_BUCKET}
@@ -29,7 +28,7 @@ spec:
           s3Url: https://s3.fr-par.scw.cloud
           publicUrl: https://s3.fr-par.scw.cloud
 
-      defaultVolumesToRestic: true
+      defaultVolumesToFsBackup: true
       
     # Backup schedules
     schedules:
@@ -58,7 +57,7 @@ spec:
     credentials:
       existingSecret: velero-s3-credentials
 
-    restic:
+    nodeAgent:
       resources:
         requests:
           cpu: 100m
