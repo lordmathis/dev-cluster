@@ -21,7 +21,7 @@ persistence:
 image:
   rootless: true
 
-forgejo:
+gitea:
   admin:
     existingSecret: forgejo-admin-secret
     email: "${FORGEJO_ADMIN_EMAIL}"
