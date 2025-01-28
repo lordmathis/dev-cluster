@@ -1,4 +1,4 @@
-# /apps/prod/gitea/values.yaml
+# /apps/prod/forgejo/values.yaml
 redis-cluster:
   enabled: false
 postgresql-ha:
@@ -21,10 +21,10 @@ persistence:
 image:
   rootless: true
 
-gitea:
+forgejo:
   admin:
-    existingSecret: gitea-admin-secret
-    email: "${GITEA_ADMIN_EMAIL}"
+    existingSecret: forgejo-admin-secret
+    email: "${FORGEJO_ADMIN_EMAIL}"
   config:
     actions:
       ENABLED: true
@@ -40,8 +40,8 @@ gitea:
       TYPE: channel
     server:
       BUILTIN_SSH_SERVER_USER: git
-      ROOT_URL: https://${GITEA_DOMAIN}
-      DOMAIN: ${GITEA_DOMAIN}
+      ROOT_URL: https://${FORGEJO_DOMAIN}
+      DOMAIN: ${FORGEJO_DOMAIN}
       SSH_CREATE_AUTHORIZED_KEYS_FILE: false
       LANDING_PAGE: explore
     service:

@@ -1,0 +1,5 @@
+# /apps/base/forgejo/namespace.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: forgejo

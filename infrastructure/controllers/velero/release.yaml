@@ -43,7 +43,7 @@ spec:
         schedule: "0 2 * * *"  # Every day at 2 AM
         template:
           includedNamespaces:
-            - gitea
+            - forgejo
           storageLocation: default
           ttl: "168h"  # Keep backups for 1 week
           includedResources:
