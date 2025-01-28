@@ -6,4 +6,4 @@ metadata:
   namespace: forgejo
 spec:
   interval: 1h
-  url: https://code.forgejo.org/forgejo-helm/forgejo
+  url: oci://code.forgejo.org/forgejo-helm/forgejo
