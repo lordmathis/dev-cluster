@@ -15,6 +15,7 @@ spec:
         name: velero-helm-repo
         namespace: velero
   values:
+    snapshotsEnabled: false
     deploNodeAgent: true
     configuration:
       backupStorageLocation:
