@@ -12,17 +12,12 @@ spec:
       version: 8.2.0
       sourceRef:
         kind: HelmRepository
-        name: vmware-tanzu
+        name: velero-helm-repo
         namespace: velero
   values:
-    # Deploy restic daemon set for volume backup
     deployRestic: true
-
-    # Configuration settings
     configuration:
       provider: aws
-      
-      # Configure backup storage location
       backupStorageLocation:
         name: default
         provider: aws
@@ -34,7 +29,6 @@ spec:
           s3Url: https://s3.fr-par.scw.cloud
           publicUrl: https://s3.fr-par.scw.cloud
 
-      # Use restic for all pod volumes by default
       defaultVolumesToRestic: true
       
     # Backup schedules
@@ -53,7 +47,6 @@ spec:
             type: scheduled
             period: daily
 
-    # Resource requests and limits
     resources:
       requests:
         cpu: 200m
@@ -62,11 +55,9 @@ spec:
         cpu: 1000m
         memory: 512Mi
 
-    # Credentials from a pre-existing secret
     credentials:
       existingSecret: velero-s3-credentials
 
-    # Configure restic settings
     restic:
       resources:
         requests:
@@ -76,7 +67,6 @@ spec:
           cpu: 500m
           memory: 256Mi
 
-    # Configure init containers resources
     initContainers:
       - name: velero-plugin-for-aws
         image: velero/velero-plugin-for-aws:v1.11.1
