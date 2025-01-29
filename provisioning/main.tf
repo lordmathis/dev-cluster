@@ -118,7 +118,7 @@ data "cloudflare_zones" "domain" {
 resource "cloudflare_record" "cluster" {
   zone_id = data.cloudflare_zones.domain.zones[0].id
   name    = "@"
-  value   = hcloud_server.cluster.ipv4_address
+  content = hcloud_server.cluster.ipv4_address
   type    = "A"
   proxied = false
 }
@@ -126,7 +126,7 @@ resource "cloudflare_record" "cluster" {
 resource "cloudflare_record" "cluster_wildcard" {
   zone_id = data.cloudflare_zones.domain.zones[0].id
   name    = "*"
-  value   = hcloud_server.cluster.ipv4_address
+  content = hcloud_server.cluster.ipv4_address
   type    = "A"
   proxied = false
 }
@@ -145,7 +145,7 @@ resource "cloudflare_record" "caa" {
 resource "cloudflare_record" "cluster_ipv6_wildcard" {
   zone_id = data.cloudflare_zones.domain.zones[0].id
   name    = "@"
-  value   = hcloud_server.cluster.ipv6_address
+  content = hcloud_server.cluster.ipv6_address
   type    = "AAAA"
   proxied = false
 }
@@ -153,7 +153,7 @@ resource "cloudflare_record" "cluster_ipv6_wildcard" {
 resource "cloudflare_record" "cluster_ipv6" {
   zone_id = data.cloudflare_zones.domain.zones[0].id
   name    = "*"
-  value   = hcloud_server.cluster.ipv6_address
+  content = hcloud_server.cluster.ipv6_address
   type    = "AAAA"
   proxied = false
 }
