@@ -25,7 +25,6 @@ spec:
         bucket: ${VELERO_BUCKET}
         config:
           region: fr-par
-          s3ForcePathStyle: true
           s3Url: https://s3.fr-par.scw.cloud
           publicUrl: https://s3.fr-par.scw.cloud
 
