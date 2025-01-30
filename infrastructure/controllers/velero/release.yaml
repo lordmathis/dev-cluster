@@ -22,14 +22,11 @@ spec:
       - name: scaleway
         provider: aws
         default: true
-        bucket: ${VELERO_BUCKET}
-        credential:
-          key: cloud
-          name: velero-s3-credentials
+        objectStorage:
+          bucket: ${VELERO_BUCKET}
         config:
           region: nl-ams
           s3Url: https://s3.nl-ams.scw.cloud
-          profile: ""
 
       defaultVolumesToFsBackup: true
       
