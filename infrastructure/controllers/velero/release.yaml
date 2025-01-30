@@ -29,6 +29,7 @@ spec:
         config:
           region: nl-ams
           s3Url: https://s3.nl-ams.scw.cloud
+          profile: ""
 
       defaultVolumesToFsBackup: true
       
