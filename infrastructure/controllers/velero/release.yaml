@@ -16,16 +16,13 @@ spec:
         namespace: velero
   values:
     snapshotsEnabled: false
-    deploNodeAgent: true
+    deployNodeAgent: true
     configuration:
       backupStorageLocation:
-      - name: default
+      - name: scaleway
         provider: aws
         default: true
         bucket: ${VELERO_BUCKET}
-        credential:
-          key: cloud
-          name: velero-s3-credentials
         config:
           region: nl-ams
           s3Url: https://s3.nl-ams.scw.cloud
@@ -47,6 +44,9 @@ spec:
           labels:
             type: scheduled
             period: daily
+
+    credentials:
+      existingSecret: velero-s3-credentials
 
     resources:
       requests:
