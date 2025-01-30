@@ -20,7 +20,7 @@ spec:
     configuration:
       backupStorageLocation:
       - name: scaleway
-        provider: aws
+        provider: velero.io/aws
         default: true
         objectStorage:
           bucket: ${VELERO_BUCKET}
