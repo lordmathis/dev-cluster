@@ -22,8 +22,7 @@ spec:
       - name: scaleway
         provider: velero.io/aws
         default: true
-        objectStorage:
-          bucket: auberon-velero-bckp
+        bucket: ${VELERO_BUCKET}
         config:
           region: nl-ams
           s3Url: https://s3.nl-ams.scw.cloud
