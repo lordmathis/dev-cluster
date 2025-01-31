@@ -29,15 +29,14 @@ spec:
 
       defaultVolumesToFsBackup: true
       
-    # Backup schedules
     schedules:
       daily-backup:
-        schedule: "0 2 * * *"  # Every day at 2 AM
+        schedule: "0 2 * * *"
         template:
           includedNamespaces:
             - forgejo
           storageLocation: default
-          ttl: "168h"  # Keep backups for 1 week
+          ttl: "168h"
           includedResources:
             - persistentvolumeclaims
             - persistentvolumes
@@ -47,23 +46,6 @@ spec:
 
     credentials:
       existingSecret: velero-s3-credentials
-
-    resources:
-      requests:
-        cpu: 200m
-        memory: 256Mi
-      limits:
-        cpu: 1000m
-        memory: 512Mi
-
-    nodeAgent:
-      resources:
-        requests:
-          cpu: 100m
-          memory: 128Mi
-        limits:
-          cpu: 500m
-          memory: 256Mi
 
     initContainers:
       - name: velero-plugin-for-aws
