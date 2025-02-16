@@ -34,7 +34,7 @@ spec:
         schedule: "0 2 * * *"
         template:
           includedNamespaces:
-            - forgejo
+            - gitea
           storageLocation: default
           ttl: "168h"
           includedResources:

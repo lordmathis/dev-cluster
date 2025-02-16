@@ -1,4 +1,4 @@
-# /apps/prod/authelia/kustomizeconfig.yaml
+# /apps/prod/gitea/kustomizeconfig.yaml
 nameReference:
 - kind: ConfigMap
   version: v1

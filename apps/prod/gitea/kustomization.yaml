@@ -1,17 +1,17 @@
-# /apps/prod/forgejo/kustomization.yaml
+# /apps/prod/gitea/kustomization.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: forgejo
+namespace: gitea
 
 resources:
-  - ../../base/forgejo
+  - ../../base/gitea
   - secret.enc.yaml
   - release.yaml
   - ingress.yaml
 
 configMapGenerator:
-  - name: forgejo-prod-values
-    namespace: forgejo
+  - name: gitea-prod-values
+    namespace: gitea
     files:
       - values.yaml
 

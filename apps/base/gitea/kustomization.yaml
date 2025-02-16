@@ -1,7 +1,7 @@
-# /apps/base/forgejo/kustomization.yaml
+# /apps/base/gitea/kustomization.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: forgejo
+namespace: gitea
 
 resources:
   - namespace.yaml

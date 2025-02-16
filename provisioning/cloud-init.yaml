@@ -33,21 +33,21 @@ packages:
 write_files:
   - content: |
       #!/bin/sh
-      FORGEJO_POD=$(kubectl --kubeconfig /home/git/.kube/config get po -n forgejo -l app=forgejo -o name --no-headers=true | cut -d'/' -f2)
-      kubectl --kubeconfig /home/git/.kube/config exec -i -n forgejo $FORGEJO_POD -c forgejo -- env SSH_ORIGINAL_COMMAND="$SSH_ORIGINAL_COMMAND" /bin/sh "$@"
-    path: /usr/local/bin/forgejo-shell
+      GITEA_POD=$(kubectl --kubeconfig /home/git/.kube/config get po -n gitea -l app=gitea -o name --no-headers=true | cut -d'/' -f2)
+      kubectl --kubeconfig /home/git/.kube/config exec -i -n gitea $GITEA_POD -c gitea -- env SSH_ORIGINAL_COMMAND="$SSH_ORIGINAL_COMMAND" /bin/sh "$@"
+    path: /usr/local/bin/gitea-shell
     permissions: "0755"
   - content: |
       #!/bin/sh
-      FORGEJO_POD=$(kubectl --kubeconfig /home/git/.kube/config get po -n forgejo -l app=forgejo -o name --no-headers=true | cut -d'/' -f2)
-      kubectl --kubeconfig /home/git/.kube/config exec -i -n forgejo $FORGEJO_POD -c forgejo -- /usr/local/bin/forgejo keys -e git -u $1 -t $2 -k $3
+      GITEA_POD=$(kubectl --kubeconfig /home/git/.kube/config get po -n gitea -l app=gitea -o name --no-headers=true | cut -d'/' -f2)
+      kubectl --kubeconfig /home/git/.kube/config exec -i -n gitea $GITEA_POD -c gitea -- /usr/local/bin/gitea keys -e git -u $1 -t $2 -k $3
     permissions: "0755"
-    path: /usr/local/bin/forgejo-keys
+    path: /usr/local/bin/gitea-keys
   - content: |
       Match User git
         AuthorizedKeysCommandUser git
-        AuthorizedKeysCommand /usr/local/bin/forgejo-keys %u %t %k
-    path: /etc/ssh/sshd_config.d/50-forgejo.conf
+        AuthorizedKeysCommand /usr/local/bin/gitea-keys %u %t %k
+    path: /etc/ssh/sshd_config.d/50-gitea.conf
     permissions: "0644"
 
 ssh:
@@ -67,7 +67,7 @@ runcmd:
   # SSH key for user
   - su ${username} -c 'ssh-keygen -t ed25519 -f /home/${username}/.ssh/id_ed25519 -q -N "" '
   # SSH Passthrough for user git
-  - usermod -s /usr/local/bin/forgejo-shell git
+  - usermod -s /usr/local/bin/gitea-shell git
   # k3s
   - curl -sfL https://get.k3s.io | sh -s - --disable=traefik
   # Wait for k3s to be ready
