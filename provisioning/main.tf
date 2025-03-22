@@ -110,52 +110,55 @@ resource "hcloud_firewall" "cluster-firewall" {
 }
 
 data "cloudflare_zones" "domain" {
-  filter {
-    name = data.sops_file.secrets.data["domain_name"]
-  }
+  name = data.sops_file.secrets.data["domain_name"]
 }
 
 resource "cloudflare_dns_record" "cluster" {
-  zone_id = data.cloudflare_zones.domain.zones[0].id
+  zone_id = data.cloudflare_zones.domain.result[0].id
   name    = "@"
   content = hcloud_server.cluster.ipv4_address
   type    = "A"
   proxied = false
+  ttl = 3600
 }
 
 resource "cloudflare_dns_record" "cluster_wildcard" {
-  zone_id = data.cloudflare_zones.domain.zones[0].id
+  zone_id = data.cloudflare_zones.domain.result[0].id
   name    = "*"
   content = hcloud_server.cluster.ipv4_address
   type    = "A"
   proxied = false
+  ttl = 3600
 }
 
 resource "cloudflare_dns_record" "caa" {
-  zone_id = data.cloudflare_zones.domain.zones[0].id
+  zone_id = data.cloudflare_zones.domain.result[0].id
   name    = "@"
   type    = "CAA"
-  data {
+  data = {
     flags = "0"
     tag   = "issue"
     value = "letsencrypt.org"
   }
+  ttl = 3600
 }
 
 resource "cloudflare_dns_record" "cluster_ipv6_wildcard" {
-  zone_id = data.cloudflare_zones.domain.zones[0].id
+  zone_id = data.cloudflare_zones.domain.result[0].id
   name    = "@"
   content = hcloud_server.cluster.ipv6_address
   type    = "AAAA"
   proxied = false
+  ttl = 3600
 }
 
 resource "cloudflare_dns_record" "cluster_ipv6" {
-  zone_id = data.cloudflare_zones.domain.zones[0].id
+  zone_id = data.cloudflare_zones.domain.result[0].id
   name    = "*"
   content = hcloud_server.cluster.ipv6_address
   type    = "AAAA"
   proxied = false
+  ttl = 3600
 }
 
 output "server_ip" {
