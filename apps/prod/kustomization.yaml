@@ -6,3 +6,4 @@ resources:
   - gitea
   - k9s-web
   - lemma
+  - ghost
