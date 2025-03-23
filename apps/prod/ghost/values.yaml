@@ -8,7 +8,7 @@ persistence:
   storageClass: "retain-local-path"
   size: 8Gi
 
-ghostHost: "${GHOST_URL}"
+ghostHost: "${GHOST_DOMAIN}"
 ghostUsername: admin
 existingSecret: "ghost-admin-secret"
 ghostEmail: "${GHOST_ADMIN_EMAIL}"
