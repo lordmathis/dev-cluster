@@ -17,8 +17,19 @@ spec:
         - |
           # Get the external IP of the node using kubectl
           SERVER_IP=$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}')
+
+          # Fallback to other address types if ExternalIP isn't available
+          if [ -z "$SERVER_IP" ]; then
+            echo "ExternalIP not found, trying InternalIP..."
+            SERVER_IP=$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(@.type=="InternalIP")].address}')
+          fi
           
           echo "Detected server IP: $SERVER_IP"
+
+          if [ -z "$SERVER_IP" ]; then
+            echo "No external IP found for the node"
+            exit 1
+          fi
           
           cat <<EOF | kubectl apply -f -
           apiVersion: metallb.io/v1beta1
