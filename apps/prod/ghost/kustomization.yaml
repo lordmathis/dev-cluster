@@ -1,19 +1,14 @@
-# /apps/prod/ghost/kustomization.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: ghost
 
 resources:
   - ../../base/ghost
-  - release.yaml
+  - pvc.yaml
   - ingress.yaml
-  - secret.enc.yaml
 
-configMapGenerator:
-  - name: ghost-prod-values
-    namespace: ghost
-    files:
-      - values.yaml
+patchesStrategicMerge:
+  - deployment-patch.yaml
 
 configurations:
   - kustomizeconfig.yaml
