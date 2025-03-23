@@ -75,7 +75,7 @@ rules:
   resources: ["ipaddresspools", "l2advertisements"]
   verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 - apiGroups: [""]
-  resources: ["nodes"]
+  resources: ["nodes", "pods"]
   verbs: ["get", "list"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
