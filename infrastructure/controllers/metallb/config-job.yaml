@@ -1,0 +1,77 @@
+# /infrastructure/controllers/metallb/config-job.yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: metallb-config
+  namespace: metallb-system
+spec:
+  template:
+    spec:
+      serviceAccountName: metallb-config-sa
+      containers:
+      - name: kubectl
+        image: bitnami/kubectl:latest
+        command:
+        - /bin/bash
+        - -c
+        - |
+          # Get the external IP of the node using kubectl
+          SERVER_IP=$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}')
+          
+          echo "Detected server IP: $SERVER_IP"
+          
+          cat <<EOF | kubectl apply -f -
+          apiVersion: metallb.io/v1beta1
+          kind: IPAddressPool
+          metadata:
+            name: first-pool
+            namespace: metallb-system
+          spec:
+            addresses:
+            - ${SERVER_IP}/32
+          EOF
+          
+          cat <<EOF | kubectl apply -f -
+          apiVersion: metallb.io/v1beta1
+          kind: L2Advertisement
+          metadata:
+            name: l2-advert
+            namespace: metallb-system
+          spec:
+            ipAddressPools:
+            - first-pool
+          EOF
+          
+          echo "MetalLB configured to use IP: $SERVER_IP"
+      restartPolicy: OnFailure
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: metallb-config-sa
+  namespace: metallb-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: metallb-config-role
+rules:
+- apiGroups: ["metallb.io"]
+  resources: ["ipaddresspools", "l2advertisements"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: [""]
+  resources: ["nodes"]
+  verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: metallb-config-rolebinding
+subjects:
+- kind: ServiceAccount
+  name: metallb-config-sa
+  namespace: metallb-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: metallb-config-role
