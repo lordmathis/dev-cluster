@@ -15,6 +15,10 @@ spec:
         - /bin/bash
         - -c
         - |
+          # Wait for the webhook to be ready
+          echo "Waiting for MetalLB webhook to be ready..."
+          kubectl -n metallb-system wait --for=condition=ready --timeout=120s pods --all
+
           # Get the external IP of the node using kubectl
           SERVER_IP=$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}')
 
