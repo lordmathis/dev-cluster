@@ -37,7 +37,10 @@ spec:
             exit 1
           fi
           
-          cat <<EOF | kubectl apply -f -
+          # Create a temporary file for the IPAddressPool
+          echo "Creating IPAddressPool with IP: $SERVER_IP/32"
+          
+          cat > /tmp/ippool.yaml << EOF
           apiVersion: metallb.io/v1beta1
           kind: IPAddressPool
           metadata:
@@ -45,10 +48,13 @@ spec:
             namespace: metallb-system
           spec:
             addresses:
-            - ${SERVER_IP}/32
+            - "$SERVER_IP/32"
           EOF
           
-          cat <<EOF | kubectl apply -f -
+          kubectl apply -f /tmp/ippool.yaml
+          
+          # Create the L2Advertisement 
+          cat > /tmp/l2advert.yaml << EOF
           apiVersion: metallb.io/v1beta1
           kind: L2Advertisement
           metadata:
@@ -58,6 +64,8 @@ spec:
             ipAddressPools:
             - first-pool
           EOF
+          
+          kubectl apply -f /tmp/l2advert.yaml
           
           echo "MetalLB configured to use IP: $SERVER_IP"
       restartPolicy: OnFailure
