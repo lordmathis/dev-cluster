@@ -1,0 +1,9 @@
+# /apps/base/ghost/repository.yaml
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: bitnami
+  namespace: ghost
+spec:
+  interval: 24h
+  url: https://charts.bitnami.com/bitnami
