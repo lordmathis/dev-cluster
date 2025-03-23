@@ -73,18 +73,20 @@ runcmd:
   - install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
   # Install k0s
   - curl -sSLf https://get.k0s.sh | sh
-  - k0s install controller --enable-worker
+  - k0s install controller --single
   - systemctl enable --now k0scontroller
-  # Wait for k3s to be ready
-  - timeout 300 bash -c 'until k0s kubectl get nodes; do sleep 5; done'
+  # Wait for k0s to be ready
+  - sleep 10
+  - timeout 300 bash -c 'until test -f /var/lib/k0s/pki/admin.conf; do echo "Waiting for k0s to generate kubeconfig..."; sleep 10; done'
+  - timeout 300 bash -c 'until k0s kubectl get nodes; do echo "Waiting for k0s nodes..."; sleep 10; done'
   # Set up kubeconfig for user
   - mkdir -p /home/${username}/.kube
-  - k0s kubeconfig admin > /home/${username}/.kube/config
+  - cp /var/lib/k0s/pki/admin.conf /home/${username}/.kube/config
   - chown -R ${username}:${username} /home/${username}/.kube
   - chmod 600 /home/${username}/.kube/config
   # Set up kubeconfig for git
   - mkdir -p /home/git/.kube
-  - k0s kubeconfig admin > /home/git/.kube/config
+  - cp /var/lib/k0s/pki/admin.conf /home/git/.kube/config
   - chown -R git:git /home/git/.kube
   - chmod 600 /home/git/.kube/config
   # Dotfiles
