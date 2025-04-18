@@ -12,3 +12,16 @@ spec:
   issuerRef:
     name: cloudflare-prod
     kind: ClusterIssuer
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: domain2
+  namespace: traefik
+spec:
+  secretName: domain2-tls
+  dnsNames:
+    - "${GHOST_DOMAIN}"
+  issuerRef:
+    name: cloudflare-prod
+    kind: ClusterIssuer
