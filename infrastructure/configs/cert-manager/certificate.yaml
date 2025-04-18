@@ -23,5 +23,5 @@ spec:
   dnsNames:
     - "${GHOST_DOMAIN}"
   issuerRef:
-    name: cloudflare-prod
+    name: cloudflare-prod-domain2
     kind: ClusterIssuer
