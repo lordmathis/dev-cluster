@@ -30,5 +30,8 @@ service:
     externalTrafficPolicy: Local
 tlsStore:
   default:
+    certificates:
+      - secretName: wildcard-nmsny-dev-tls
+      - secretName: domain2-tls
     defaultCertificate:
       secretName: wildcard-nmsny-dev-tls
