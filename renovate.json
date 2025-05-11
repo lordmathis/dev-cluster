@@ -5,5 +5,18 @@
   ],
   "flux": {
     "fileMatch": ["\\.yaml$"]
-  }
+  },
+  "packageRules": [
+    {
+      "matchPackageNames": ["docker.io/bitnami/postgresql"],
+      "versioning": "regex:^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)(-debian-\\d+-r(?<build>\\d+))?$",
+      "allowedVersions": "/^(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)(-debian-\\d+-r(?<build>\\d+))?$/",
+      "packagePatterns": ["postgresql"],
+      "ignoreUnstable": true,
+      "separateMinorPatch": true,
+      "patch": {
+        "enabled": false
+      }
+    }
+  ]
 }
