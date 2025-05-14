@@ -7,3 +7,4 @@ resources:
   - k9s-web
   - lemma
   - ghost
+  - dashboard
