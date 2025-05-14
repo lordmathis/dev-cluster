@@ -10,6 +10,8 @@ spec:
   routes:
   - match: Host(`${K8S_DASHBOARD_DOMAIN}`)
     kind: Rule
+    middlewares:
+    - name: "auth-authelia@kubernetescrd"
     services:
     - name: dashboard-kong-proxy
       port: 443
