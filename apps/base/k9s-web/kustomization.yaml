@@ -1,7 +1,0 @@
-# /apps/base/k9s-web/kustomization.yaml
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-namespace: k9s
-
-resources:
-  - https://github.com/LordMathis/k9s-web/manifests?ref=main
