@@ -1,5 +1,5 @@
 # /apps/prod/gitea/values.yaml
-redis-cluster:
+valkey-cluster:
   enabled: false
 postgresql-ha:
   enabled: false
