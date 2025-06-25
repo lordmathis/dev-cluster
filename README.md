@@ -1,6 +1,6 @@
 # Dev-Cluster
 
-![Cluster Health Monitor](https://github.com/lordmathis/dev-cluster/workflows/health_monitor.yaml/badge.svg)
+![Cluster Health Monitor](https://github.com/lordmathis/dev-cluster/actions/workflows/health_monitor.yaml/badge.svg)
 
 Provisioning, configuration and manifests for my Kubernetes dev cluster on Hetzner Cloud, set up for GitOps with Flux CD.
 
