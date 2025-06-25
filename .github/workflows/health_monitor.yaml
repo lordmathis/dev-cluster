@@ -1,0 +1,142 @@
+name: Cluster Health Monitor
+
+on:
+  schedule:
+    # Run every hour
+    - cron: '0 * * * *'
+  workflow_dispatch: # Allow manual triggering
+
+env:
+  # Timeout for each health check request (in seconds)
+  REQUEST_TIMEOUT: 30
+  # Expected HTTP status codes (comma-separated)
+  EXPECTED_STATUS_CODES: "200,301,302,401,403"
+
+jobs:
+  health-check:
+    name: Monitor Cluster Endpoints
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up endpoint monitoring
+        run: |
+          # Create endpoints file from secrets
+          cat << 'EOF' > endpoints.txt
+          ${{ secrets.CLUSTER_ENDPOINTS }}
+          EOF
+          
+          # Validate endpoints file
+          if [ ! -s endpoints.txt ]; then
+            echo "❌ No endpoints found in CLUSTER_ENDPOINTS secret"
+            exit 1
+          fi
+          
+          endpoint_count=$(grep -v '^[[:space:]]*$' endpoints.txt | grep -v '^[[:space:]]*#' | wc -l)
+          echo "📋 Found $endpoint_count endpoints to monitor"
+          echo ""
+
+      - name: Install dependencies
+        run: |
+          # Install curl and jq for HTTP requests and JSON processing
+          sudo apt-get update
+          sudo apt-get install -y curl jq
+
+      - name: Monitor endpoints
+        run: |
+          #!/bin/bash
+          set -e
+          
+          # Colors for output
+          RED='\033[0;31m'
+          GREEN='\033[0;32m'
+          YELLOW='\033[1;33m'
+          BLUE='\033[0;34m'
+          NC='\033[0m' # No Color
+          
+          # Counters
+          total_endpoints=0
+          successful_checks=0
+          failed_checks=0
+          failed_endpoints=()
+          endpoint_index=0
+          
+          echo -e "${BLUE}🔍 Starting cluster health monitoring...${NC}"
+          echo ""
+          
+          # Read endpoints and perform health checks
+          while IFS= read -r endpoint || [ -n "$endpoint" ]; do
+            # Skip empty lines and comments
+            if [[ -z "$endpoint" || "$endpoint" =~ ^[[:space:]]*# ]]; then
+              continue
+            fi
+            
+            # Trim whitespace
+            endpoint=$(echo "$endpoint" | xargs)
+            
+            if [[ -z "$endpoint" ]]; then
+              continue
+            fi
+            
+            total_endpoints=$((total_endpoints + 1))
+            endpoint_index=$((endpoint_index + 1))
+            
+            echo -e "${BLUE}Testing endpoint #${endpoint_index}:${NC}"
+            
+            # Perform health check with curl
+            response=$(curl -s -w "\n%{http_code}\n%{time_total}" \
+              --max-time $REQUEST_TIMEOUT \
+              --connect-timeout 10 \
+              --retry 2 \
+              --retry-delay 1 \
+              --user-agent "GitHub-Actions-Health-Monitor/1.0" \
+              --location \
+              --insecure \
+              "$endpoint" 2>/dev/null || echo -e "\nERROR\n0")
+            
+            # Parse response
+            http_code=$(echo "$response" | tail -n 2 | head -n 1)
+            response_time=$(echo "$response" | tail -n 1)
+            
+            # Check if request was successful
+            if [[ "$http_code" == "ERROR" || -z "$http_code" ]]; then
+              echo -e "  ${RED}❌ Connection failed${NC}"
+              failed_checks=$((failed_checks + 1))
+              failed_endpoints+=("Endpoint #$endpoint_index (Connection failed)")
+            else
+              # Check if status code is expected
+              if [[ ",$EXPECTED_STATUS_CODES," == *",$http_code,"* ]]; then
+                echo -e "  ${GREEN}✅ HTTP $http_code${NC} (${response_time}s)"
+                successful_checks=$((successful_checks + 1))
+              else
+                echo -e "  ${RED}❌ HTTP $http_code${NC} (${response_time}s) - Unexpected status code"
+                failed_checks=$((failed_checks + 1))
+                failed_endpoints+=("Endpoint #$endpoint_index (HTTP $http_code)")
+              fi
+            fi
+            
+            echo ""
+            
+          done < endpoints.txt
+          
+          # Summary
+          echo -e "${BLUE}📊 Health Check Summary:${NC}"
+          echo -e "  Total endpoints: $total_endpoints"
+          echo -e "  ${GREEN}Successful: $successful_checks${NC}"
+          echo -e "  ${RED}Failed: $failed_checks${NC}"
+          echo ""
+          
+          # Report failed endpoints
+          if [ $failed_checks -gt 0 ]; then
+            echo -e "${RED}💥 Failed endpoints:${NC}"
+            for failed_endpoint in "${failed_endpoints[@]}"; do
+              echo -e "  ${RED}• $failed_endpoint${NC}"
+            done
+            echo ""
+            
+            exit 1
+          else
+            echo -e "${GREEN}🎉 All endpoints are healthy!${NC}"
+          fi
