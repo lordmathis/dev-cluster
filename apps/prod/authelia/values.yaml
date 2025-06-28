@@ -50,3 +50,10 @@ ingress:
     matchOverride: Host(`${AUTHELIA_DOMAIN}`)
     entryPoints:
       - "websecure"
+
+persistence:
+  enabled: true
+  storageClass: retain-local-path
+  size: 1Gi
+  accessModes:
+    - ReadWriteOnce
