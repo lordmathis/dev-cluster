@@ -1,5 +1,4 @@
 # /apps/prod/authelia/values.yaml
-domain: '${DOMAIN}'
 configMap:
   authentication_backend:
     file:
@@ -15,9 +14,7 @@ configMap:
         policy: one_factor
   server:
     endpoints:
-      authz:
-        forward-auth:
-          implementation: 'ForwardAuth'
+      automatic_authz_implementations: ['ForwardAuth']
   session:
     redis:
       enabled: false
@@ -48,7 +45,6 @@ pod:
 
 ingress:
   enabled: true
-  ingressClassName: "traefik"
   traefikCRD:
     enabled: true
     matchOverride: Host(`${AUTHELIA_DOMAIN}`)
