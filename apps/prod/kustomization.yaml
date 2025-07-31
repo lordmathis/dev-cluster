@@ -8,3 +8,4 @@ resources:
   - ghost
   - dashboard
   - llamactl-proxy
+  - chat-ui-proxy
