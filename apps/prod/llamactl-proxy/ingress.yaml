@@ -1,0 +1,16 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: llamactl-ingress
+  namespace: llamactl
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`${LLAMACTL_DOMAIN}`)
+    kind: Rule
+    services:
+    - name: llamactl-proxy
+      port: 80
+    middlewares:
+      - name: "auth-authelia@kubernetescrd"

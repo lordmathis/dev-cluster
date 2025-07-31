@@ -7,3 +7,4 @@ resources:
   - lemma
   - ghost
   - dashboard
+  - llamactl-proxy
