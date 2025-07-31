@@ -12,5 +12,3 @@ spec:
     services:
     - name: llamactl-proxy
       port: ${LLAMACTL_INTERNAL_PORT}
-    middlewares:
-      - name: "auth-authelia@kubernetescrd"
