@@ -12,6 +12,8 @@ ingressRoute:
 providers:
   kubernetesCRD:
     allowCrossNamespace: true
+    allowExternalNameServices: true
+    allowEmptyServices: true
 persistence:
   enabled: true
   storageClass: retain-local-path
