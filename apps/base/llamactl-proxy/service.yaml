@@ -4,9 +4,9 @@ metadata:
   name: llamactl-proxy
   namespace: llamactl
 spec:
-  type: ExternalName
-  externalName: ${LLAMACTL_INTERNAL_IP}
+  type: ClusterIP
   ports:
   - port: 80
     targetPort: ${LLAMACTL_INTERNAL_PORT}
     name: http
+  selector: {}

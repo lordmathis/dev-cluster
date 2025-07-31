@@ -5,3 +5,4 @@ namespace: llamactl
 resources:
   - namespace.yaml
   - service.yaml
+  - endpoint.yaml
