@@ -8,3 +8,7 @@ metadata:
 spec:
   type: ExternalName
   externalName: placeholder
+  ports:
+  - port: 80
+    targetPort: ${LLAMACTL_INTERNAL_PORT}
+    name: http
