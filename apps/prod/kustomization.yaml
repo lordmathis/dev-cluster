@@ -7,5 +7,4 @@ resources:
   - lemma
   - ghost
   - dashboard
-  - llamactl-proxy
-  - chat-ui-proxy
+  - homelab-proxy
