@@ -6,4 +6,3 @@ resources:
   - ../../base/homelab-proxy
   - llamactl.yaml
   - chatui.yaml
-  - openhands.yaml
