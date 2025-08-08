@@ -4,7 +4,6 @@ namespace: homelab-proxy
 
 resources:
   - ../../base/homelab-proxy
-  - chatui-ingress.yaml
-  - chatui-service.yaml
-  - llamactl-ingress.yaml
-  - llamactl-service.yaml
+  - llamactl.yaml
+  - chatui.yaml
+  - openhands.yaml

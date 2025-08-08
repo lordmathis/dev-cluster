@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: openhands-proxy
+  namespace: homelab-proxy
+  annotations:
+    tailscale.com/tailnet-fqdn: ${OPENHANDS_TAILNET_FQDN}
+spec:
+  type: ExternalName
+  externalName: placeholder
+  ports:
+    - port: ${OPENHANDS_INTERNAL_PORT}
+      name: http
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: openhands-ingress
+  namespace: homelab-proxy
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`${OPENHANDS_DOMAIN}`)
+      kind: Rule
+      services:
+        - name: openhands-proxy
+          port: ${OPENHANDS_INTERNAL_PORT}
+      middlewares:
+        - name: "auth-authelia@kubernetescrd"
