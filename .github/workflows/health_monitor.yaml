@@ -38,12 +38,6 @@ jobs:
           echo "📋 Found $endpoint_count endpoints to monitor"
           echo ""
 
-      - name: Install dependencies
-        run: |
-          # Install curl and jq for HTTP requests and JSON processing
-          sudo apt-get update
-          sudo apt-get install -y curl jq
-
       - name: Monitor endpoints
         run: |
           #!/bin/bash
