@@ -7,3 +7,4 @@ resources:
   - llamactl.yaml
   - chatui.yaml
   - netdata.yaml
+  - mcpo.yaml
