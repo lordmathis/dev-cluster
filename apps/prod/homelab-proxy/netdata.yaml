@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: netdata-proxy
+  namespace: homelab-proxy
+  annotations:
+    tailscale.com/tailnet-fqdn: ${NETDATA_TAILNET_FQDN}
+spec:
+  type: ExternalName
+  externalName: placeholder
+  ports:
+    - port: ${NETDATA_INTERNAL_PORT}
+      name: http
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: netdata-ingress
+  namespace: homelab-proxy
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`${NETDATA_DOMAIN}`)
+      kind: Rule
+      services:
+        - name: netdata-proxy
+          port: ${NETDATA_INTERNAL_PORT}
+      middlewares:
+        - name: "auth-authelia@kubernetescrd"
