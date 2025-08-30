@@ -1,0 +1,39 @@
+snapshotsEnabled: false
+deployNodeAgent: true
+configuration:
+  backupStorageLocation:
+  - name: scaleway
+    provider: velero.io/aws
+    default: true
+    bucket: ${VELERO_BUCKET}
+    config:
+      region: ${VELERO_REGION}
+      s3Url: https://s3.${VELERO_REGION}.scw.cloud
+
+  defaultVolumesToFsBackup: true
+  
+schedules:
+  daily-backup:
+    schedule: "0 2 * * *"
+    template:
+      includedNamespaces:
+        - gitea
+      storageLocation: default
+      ttl: "168h"
+      includedResources:
+        - persistentvolumeclaims
+        - persistentvolumes
+      labels:
+        type: scheduled
+        period: daily
+
+credentials:
+  existingSecret: velero-s3-credentials
+
+initContainers:
+  - name: velero-plugin-for-aws
+    image: velero/velero-plugin-for-aws:v1.12.2
+    imagePullPolicy: IfNotPresent
+    volumeMounts:
+      - mountPath: /target
+        name: plugins
