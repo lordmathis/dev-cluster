@@ -4,7 +4,7 @@ namespace: velero
 
 resources:
   - ../../base/velero
-  - secret.yaml
+  - secret.enc.yaml
   - release.yaml
 
 configMapGenerator:
