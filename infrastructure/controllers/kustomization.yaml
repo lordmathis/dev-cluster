@@ -6,4 +6,3 @@ resources:
   - cert-manager
   - traefik
   - tailscale
-  - velero
