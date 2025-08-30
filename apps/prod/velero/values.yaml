@@ -37,3 +37,6 @@ initContainers:
     volumeMounts:
       - mountPath: /target
         name: plugins
+
+nodeAgent:
+  podVolumePath: /var/lib/k0s/kubelet/pods
