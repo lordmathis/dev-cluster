@@ -8,4 +8,3 @@ resources:
   - ghost
   - dashboard
   - homelab-proxy
-  - velero
