@@ -39,7 +39,7 @@ spec:
             secretKeyRef:
               name: lemma-secrets
               key: jwt-signing-key
-        - name: LEMMA_DB_PATH
+        - name: LEMMA_DB_URL
           value: /data/lemma.db
         volumeMounts:
         - name: lemma-data
