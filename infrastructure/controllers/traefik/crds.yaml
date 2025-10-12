@@ -1,5 +1,5 @@
 # /infrastructure/controllers/traefik/crds.yaml
-apiVersion: source.toolkit.fluxcd.io/v1beta1
+apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
   name: traefik-crds
