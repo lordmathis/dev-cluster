@@ -40,7 +40,7 @@ spec:
               name: lemma-secrets
               key: jwt-signing-key
         - name: LEMMA_DB_URL
-          value: sqlite:///data/lemma.db
+          value: sqlite:///app/data/lemma.db
         volumeMounts:
         - name: lemma-data
           mountPath: /app/data
