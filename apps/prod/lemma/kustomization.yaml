@@ -10,4 +10,4 @@ resources:
 
 images:
   - name: ghcr.io/lordmathis/lemma
-    newTag: v0.5.3
+    newTag: v0.5.5
