@@ -18,9 +18,6 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v5
-
       - name: Set up endpoint monitoring
         run: |
           # Create endpoints file from secrets
