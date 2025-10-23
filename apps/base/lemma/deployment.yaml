@@ -43,7 +43,7 @@ spec:
           value: sqlite:///data/lemma.db
         volumeMounts:
         - name: lemma-data
-          mountPath: /data
+          mountPath: /app/data
       volumes:
       - name: lemma-data
         persistentVolumeClaim:
