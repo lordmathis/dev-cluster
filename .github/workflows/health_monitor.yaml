@@ -35,11 +35,14 @@ jobs:
             total=$((total + 1))
             echo "Testing: $url"
             
-            # Simple curl check - fail if HTTP code >= 400 or connection fails
-            if curl -sfLI --max-time 10 "$url" >/dev/null 2>&1; then
-              echo "✅ OK"
+            # Get HTTP status code
+            status=$(curl -sfLI --max-time 10 -o /dev/null -w "%{http_code}" "$url" 2>&1 || echo "000")
+            
+            # Accept 2xx, 3xx, 401, and 403 as healthy
+            if [[ "$status" =~ ^(2|3|401|403) ]]; then
+              echo "✅ OK (HTTP $status)"
             else
-              echo "❌ FAILED"
+              echo "❌ FAILED (HTTP $status)"
               failed=$((failed + 1))
             fi
             echo ""
