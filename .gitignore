@@ -7,3 +7,5 @@ s3_env.yaml
 # General unencrypted secrets
 secret.yaml
 users-database.yaml
+
+endpoints.txt
