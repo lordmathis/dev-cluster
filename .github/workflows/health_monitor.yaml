@@ -1,4 +1,4 @@
-name: Cluster Health Monitor
+name: Cluster Health Status
 
 on:
   schedule:
