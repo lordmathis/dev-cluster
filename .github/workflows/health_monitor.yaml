@@ -3,6 +3,9 @@ name: Cluster Health Status
 on:
   schedule:
     - cron: '0 * * * *'
+  push:
+    paths:
+      - .github/workflows/*
   workflow_dispatch:
 
 jobs:
@@ -12,7 +15,6 @@ jobs:
     steps:
       - name: Check endpoints
         run: |
-          # Simple and clean endpoint checker
           ENDPOINTS="${{ secrets.CLUSTER_ENDPOINTS }}"
           
           # Validate input
