@@ -45,6 +45,7 @@ gitea:
       SSH_CREATE_AUTHORIZED_KEYS_FILE: false
       LANDING_PAGE: explore
     service:
+      REQUIRE_SIGNIN_VIEW: expensive
       REGISTER_MANUAL_CONFIRM: true
     indexer:
       ISSUE_INDEXER_TYPE: bleve
