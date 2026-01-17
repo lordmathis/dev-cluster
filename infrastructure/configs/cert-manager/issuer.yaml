@@ -8,27 +8,27 @@ spec:
     email: ${LETSENCRYPT_EMAIL}
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
-      name: cloudflare-prod-issuer-account-key 
+      name: cloudflare-prod-issuer-account-key-main
     solvers:
     - dns01:
         cloudflare:
           apiTokenSecretRef:
-            name: cloudflare-api-token-secret
+            name: cloudflare-api-token-secret-main
             key: api-token
 ---
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
-  name: cloudflare-prod-domain2
+  name: cloudflare-prod-secondary
 spec:
   acme:
     email: ${LETSENCRYPT_EMAIL}
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
-      name: cloudflare-prod-issuer-account-key-domain2
+      name: cloudflare-prod-issuer-account-key-secondary
     solvers:
     - dns01:
         cloudflare:
           apiTokenSecretRef:
-            name: cloudflare-api-token-secret-domain2
+            name: cloudflare-api-token-secret-secondary
             key: api-token

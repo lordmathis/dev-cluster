@@ -7,8 +7,8 @@ metadata:
 spec:
   secretName: wildcard-main-tls
   dnsNames:
-    - "${DOMAIN}"
-    - "*.${DOMAIN}"
+    - "${MAIN_DOMAIN}"
+    - "*.${MAIN_DOMAIN}"
   issuerRef:
     name: cloudflare-prod
     kind: ClusterIssuer
@@ -23,7 +23,7 @@ spec:
   dnsNames:
     - "*.${HOMELAB_DOMAIN}"
   issuerRef:
-    name: cloudflare-prod-homelab
+    name: cloudflare-prod
     kind: ClusterIssuer
 ---
 apiVersion: cert-manager.io/v1
@@ -34,7 +34,7 @@ metadata:
 spec:
   secretName: wildcard-secondary-tls
   dnsNames:
-    - "${GHOST_DOMAIN}"
+    - "${SECONDARY_DOMAIN}"
   issuerRef:
-    name: cloudflare-prod-domain2
+    name: cloudflare-prod-secondary
     kind: ClusterIssuer
