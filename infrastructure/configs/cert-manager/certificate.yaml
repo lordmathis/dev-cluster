@@ -2,10 +2,10 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: wildcard-nmsny-dev
+  name: wildcard-main
   namespace: traefik
 spec:
-  secretName: wildcard-nmsny-dev-tls
+  secretName: wildcard-main-tls
   dnsNames:
     - "${DOMAIN}"
     - "*.${DOMAIN}"
@@ -16,10 +16,23 @@ spec:
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: domain2
+  name: wildcard-homelab
   namespace: traefik
 spec:
-  secretName: domain2-tls
+  secretName: wildcard-homelab-tls
+  dnsNames:
+    - "*.${HOMELAB_DOMAIN}"
+  issuerRef:
+    name: cloudflare-prod-homelab
+    kind: ClusterIssuer
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcard-secondary
+  namespace: traefik
+spec:
+  secretName: wildcard-secondary-tls
   dnsNames:
     - "${GHOST_DOMAIN}"
   issuerRef:

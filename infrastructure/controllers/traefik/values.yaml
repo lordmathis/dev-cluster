@@ -33,7 +33,8 @@ service:
 tlsStore:
   default:
     certificates:
-      - secretName: wildcard-nmsny-dev-tls
-      - secretName: domain2-tls
+      - secretName: wildcard-main-tls
+      - secretName: wildcard-secondary-tls
+      - secretName: wildcard-homelab-tls
     defaultCertificate:
-      secretName: wildcard-nmsny-dev-tls
+      secretName: wildcard-main-tls
