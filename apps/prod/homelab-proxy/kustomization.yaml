@@ -8,3 +8,5 @@ resources:
   - chatui.yaml
   - mcpo.yaml
   - netdata.yaml
+  - service.yaml
+  - ingress.yaml
