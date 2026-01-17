@@ -12,4 +12,6 @@ spec:
       services:
         - name: homelab-proxy
           port: ${HOMELAB_INTERNAL_PORT}
+  tls:
+    secretName: wildcard-homelab-tls
       
