@@ -4,9 +4,5 @@ namespace: homelab-proxy
 
 resources:
   - ../../base/homelab-proxy
-  - llamactl.yaml
-  - chatui.yaml
-  - mcpo.yaml
-  - netdata.yaml
   - service.yaml
   - ingress.yaml
