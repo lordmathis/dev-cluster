@@ -30,7 +30,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: wildcard-secondary
-  namespace: traefik
+  namespace: ghost
 spec:
   secretName: wildcard-secondary-tls
   dnsNames:

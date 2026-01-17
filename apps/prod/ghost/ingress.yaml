@@ -12,3 +12,5 @@ spec:
     services:
     - name: ghost
       port: 80
+  tls:
+    secretName: wildcard-secondary-tls
