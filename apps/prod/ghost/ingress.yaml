@@ -7,10 +7,10 @@ spec:
   entryPoints:
     - websecure
   routes:
-  - match: Host(`${GHOST_DOMAIN}`)
+  - match: Host(`${SECONDARY_DOMAIN}`)
     kind: Rule
     services:
     - name: ghost
       port: 80
   tls:
-    secretName: wildcard-secondary-tls
+    secretName: secondary-tls
