@@ -10,16 +10,16 @@ configMap:
       enabled: false
   access_control:
     rules:
-      - domain: '*.${DOMAIN}'
+      - domain: '*.${MAIN_DOMAIN}'
         policy: one_factor
   server:
     endpoints:
-      automatic_authz_implementations: ['ForwardAuth']
+      automatic_authz_implementations: ['ForwardAuth', 'AuthRequest', 'Legacy']
   session:
     redis:
       enabled: false
     cookies:
-      - domain: '${DOMAIN}'
+      - domain: '${MAIN_DOMAIN}'
         authelia_url: 'https://${AUTHELIA_DOMAIN}'
         name: 'authelia_session'
   storage:
