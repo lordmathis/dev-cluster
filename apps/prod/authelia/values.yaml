@@ -14,7 +14,7 @@ configMap:
         policy: one_factor
   server:
     endpoints:
-      automatic_authz_implementations: ['ForwardAuth', 'AuthRequest', 'Legacy']
+      automatic_authz_implementations: ['ForwardAuth', 'AuthRequest']
   session:
     redis:
       enabled: false
