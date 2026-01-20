@@ -5,7 +5,7 @@ s3_env.yaml
 .terraform
 
 # General unencrypted secrets
-secret.yaml
+*secret.yaml
 users-database.yaml
 
 endpoints.txt
