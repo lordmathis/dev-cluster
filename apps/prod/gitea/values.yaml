@@ -48,6 +48,8 @@ gitea:
       REQUIRE_SIGNIN_VIEW: expensive
       REGISTER_MANUAL_CONFIRM: true
       DISABLE_REGISTRATION: true
+      ENABLE_CAPTCHA: true
+      CAPTCHA_TYPE: cfturnstile
     indexer:
       ISSUE_INDEXER_TYPE: bleve
       REPO_INDEXER_ENABLED: true
