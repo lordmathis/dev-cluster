@@ -47,6 +47,7 @@ gitea:
     service:
       REQUIRE_SIGNIN_VIEW: expensive
       REGISTER_MANUAL_CONFIRM: true
+      DISABLE_REGISTRATION: true
     indexer:
       ISSUE_INDEXER_TYPE: bleve
       REPO_INDEXER_ENABLED: true
