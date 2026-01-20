@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: authelia-tailscale
+  namespace: auth
+  annotations:
+    tailscale.com/expose: "true"
+    tailscale.com/hostname: "authelia-internal"
+spec:
+  selector:
+    app.kubernetes.io/name: authelia
+  ports:
+    - port: 80
+      targetPort: 9091
+      name: http
+  type: ClusterIP

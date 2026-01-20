@@ -8,6 +8,7 @@ resources:
   - users-database.enc.yaml
   - release.yaml
   - forward-auth-middleware.yaml
+  - tailscale-service.yaml
 
 configMapGenerator:
   - name: authelia-prod-values
