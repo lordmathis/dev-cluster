@@ -1,4 +1,3 @@
-# /apps/prod/gitea/values.yaml
 valkey-cluster:
   enabled: false
 postgresql-ha:

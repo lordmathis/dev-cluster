@@ -19,14 +19,16 @@ persistence:
   storageClass: retain-local-path
 ports:
   websecure:
-    tls:
-      enabled: true
+    http:
+      tls:
+        enabled: true
   web:
-    redirections:
-      entryPoint:
-        to: websecure
-        scheme: https
-        permanent: true
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+          permanent: true
 service:
   spec:
     externalTrafficPolicy: Local
