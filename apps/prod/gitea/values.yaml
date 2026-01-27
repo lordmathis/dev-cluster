@@ -68,5 +68,16 @@ containerSecurityContext:
   runAsNonRoot: true
   runAsUser: 1001
 
+extraVolumes:
+  - name: gitea-robots
+    configMap:
+      name: gitea-robots
+
+extraVolumeMounts:
+  - name: gitea-robots
+    mountPath: /data/gitea/public/assets/robots.txt
+    subPath: robots.txt
+    readOnly: true
+
 test:
   enabled: false

@@ -6,6 +6,7 @@ namespace: gitea
 resources:
   - ../../base/gitea
   - secret.enc.yaml
+  - robots-configmap.yaml
   - release.yaml
   - ingress.yaml
 
