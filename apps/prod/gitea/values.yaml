@@ -75,7 +75,7 @@ extraVolumes:
 
 extraVolumeMounts:
   - name: gitea-robots
-    mountPath: /data/gitea/public/assets/robots.txt
+    mountPath: /data/gitea/public/robots.txt
     subPath: robots.txt
     readOnly: true
 
