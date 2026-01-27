@@ -4,7 +4,7 @@ namespace: crowdsec
 
 resources:
   - namespace.yaml
-  - secret.enc.yaml
+  - lapi-secret.enc.yaml
   - repository.yaml
   - release.yaml
 
