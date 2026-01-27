@@ -11,7 +11,7 @@ configMap:
   access_control:
     rules:
       - domain: '*.${MAIN_DOMAIN}'
-        policy: one_factor
+        policy: two_factor
   server:
     endpoints:
       automatic_authz_implementations: ['ForwardAuth', 'AuthRequest']
