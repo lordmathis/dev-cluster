@@ -17,6 +17,14 @@ lapi:
       size: 100Mi
       storageClassName: "retain-local-path"
 
+  resources:
+    limits:
+      memory: 250Mi
+      cpu: 250m
+    requests:
+      cpu: 100m
+      memory: 250Mi
+
 # Agent Configuration
 agent:
   # Acquire Traefik logs from pods
@@ -29,6 +37,14 @@ agent:
   env:
     - name: COLLECTIONS
       value: "crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/whitelist-good-actors"
+
+  resources:
+    limits:
+      memory: 250Mi
+      cpu: 250m
+    requests:
+      cpu: 100m
+      memory: 250Mi
 
 # Main configuration file (handles auto-registration)
 config:
