@@ -1,14 +1,16 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: crowdsec
+
 resources:
   - namespace.yaml
+  - secret.enc.yaml
   - repository.yaml
-  - crds.yaml
   - release.yaml
 
 configMapGenerator:
-  - name: traefik-prod-values
-    namespace: traefik
+  - name: crowdsec-prod-values
+    namespace: crowdsec
     files:
       - values.yaml
 

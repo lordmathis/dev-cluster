@@ -1,0 +1,21 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: crowdsec-bouncer
+  namespace: crowdsec
+spec:
+  plugin:
+    crowdsec-bouncer-traefik-plugin:
+      enabled: true
+      logLevel: info
+      crowdsecMode: live
+      crowdsecLapiScheme: http
+      crowdsecLapiHost: crowdsec-service.crowdsec.svc.cluster.local:8080
+      crowdsecLapiKey: ""  # TODO: Add bouncer API key here after generating it
+      crowdsecCapiMachineId: ""
+      crowdsecCapiPassword: ""
+      crowdsecCapiScenarios:
+        - crowdsecurity/http-path-traversal-probing
+        - crowdsecurity/http-xss-probing
+        - crowdsecurity/http-generic-bf
