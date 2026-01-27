@@ -1,4 +1,3 @@
-# /infrastructure/controllers/traefik/values.yaml
 logs:
   access:
     enabled: true
@@ -27,6 +26,8 @@ ports:
     http:
       tls:
         enabled: true
+      middlewares:
+        - name: "crowdsec-crowdsec-bouncer@kubernetescrd"
   web:
     http:
       redirections:
