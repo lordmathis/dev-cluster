@@ -42,7 +42,5 @@ tlsStore:
   default:
     certificates:
       - secretName: wildcard-main-tls
-      - secretName: wildcard-homelab-tls
-      - secretName: secondary-tls
     defaultCertificate:
       secretName: wildcard-main-tls
