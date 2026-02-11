@@ -22,6 +22,7 @@ spec:
   backup:
     schedule: "0 2 * * *"
     keepJobs: 7
+    promURL: ""
     podSecurityContext:
       runAsUser: 0
 
@@ -29,11 +30,13 @@ spec:
   check:
     schedule: "0 3 * * 0"
     keepJobs: 3
+    promURL: ""
 
   # Prune old backups weekly on Sundays at 4:00 AM
   prune:
     schedule: "0 4 * * 0"
     keepJobs: 3
+    promURL: ""
     retention:
       keepLast: 3
       keepDaily: 7
