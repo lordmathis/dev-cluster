@@ -36,7 +36,6 @@ spec:
   prune:
     schedule: "0 4 * * 0"
     keepJobs: 3
-    promURL: ""
     retention:
       keepLast: 3
       keepDaily: 7
