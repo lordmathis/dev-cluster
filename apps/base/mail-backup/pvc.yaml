@@ -1,0 +1,13 @@
+# /apps/base/mail-backup/pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: maildir-storage
+  namespace: mail-backup
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: retain-local-path
+  resources:
+    requests:
+      storage: 20Gi

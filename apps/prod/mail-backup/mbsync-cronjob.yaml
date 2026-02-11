@@ -1,0 +1,110 @@
+# /apps/prod/mail-backup/mbsync-cronjob.yaml
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: mbsync
+  namespace: mail-backup
+spec:
+  schedule: "0 * * * *"  # Every hour
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: mbsync
+            image: alpine:3.23
+            command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+              echo "Installing mbsync..."
+              apk add --no-cache isync gettext
+              
+              echo "Substituting environment variables in mbsync config..."
+              envsubst < /config/mbsyncrc > /tmp/.mbsyncrc
+              
+              echo "Creating maildir directories..."
+              mkdir -p /maildir/account1 /maildir/account2 /maildir/account3
+              
+              echo "Starting IMAP sync..."
+              mbsync -c /tmp/.mbsyncrc -V -a
+              
+              echo "Sync completed successfully"
+              echo "Maildir sizes:"
+              du -sh /maildir/*
+            env:
+            - name: MAIL_ACCOUNT1_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: mail-credentials
+                  key: account1-host
+            - name: MAIL_ACCOUNT1_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: mail-credentials
+                  key: account1-port
+            - name: MAIL_ACCOUNT1_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mail-credentials
+                  key: account1-user
+            - name: MAIL_ACCOUNT2_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: mail-credentials
+                  key: account2-host
+            - name: MAIL_ACCOUNT2_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: mail-credentials
+                  key: account2-port
+            - name: MAIL_ACCOUNT2_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mail-credentials
+                  key: account2-user
+            - name: MAIL_ACCOUNT3_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: mail-credentials
+                  key: account3-host
+            - name: MAIL_ACCOUNT3_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: mail-credentials
+                  key: account3-port
+            - name: MAIL_ACCOUNT3_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mail-credentials
+                  key: account3-user
+            volumeMounts:
+            - name: maildir
+              mountPath: /maildir
+            - name: config
+              mountPath: /config
+            - name: secrets
+              mountPath: /secrets
+              readOnly: true
+            resources:
+              limits:
+                cpu: 500m
+                memory: 256Mi
+              requests:
+                cpu: 100m
+                memory: 128Mi
+          volumes:
+          - name: maildir
+            persistentVolumeClaim:
+              claimName: maildir-storage
+          - name: config
+            configMap:
+              name: mbsync-config
+          - name: secrets
+            secret:
+              secretName: mail-credentials

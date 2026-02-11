@@ -1,0 +1,249 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: restic-backup-account1
+  namespace: mail-backup
+spec:
+  schedule: "30 2 * * *"  # Daily at 2:30 AM (between 2:00 and 3:00 mbsync runs)
+  successfulJobsHistoryLimit: 7
+  failedJobsHistoryLimit: 3
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: restic
+            image: restic/restic:0.17.3
+            command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+              
+              echo "Initializing restic repository (if needed)..."
+              restic snapshots || restic init
+              
+              echo "Starting backup for account1..."
+              restic backup /maildir/account1 \
+                --tag mail-backup \
+                --tag account1 \
+                --host mail-backup-cluster
+              
+              echo "Applying retention policy (keep last 7 daily backups)..."
+              restic forget \
+                --keep-daily 7 \
+                --prune
+              
+              echo "Checking repository integrity..."
+              restic check --read-data-subset=5%
+              
+              echo "Backup statistics:"
+              restic stats
+              
+              echo "Recent snapshots:"
+              restic snapshots --last
+            env:
+            - name: RESTIC_REPOSITORY
+              valueFrom:
+                secretKeyRef:
+                  name: restic-credentials
+                  key: account1-repository
+            - name: RESTIC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: restic-credentials
+                  key: restic-password
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: restic-credentials
+                  key: aws-access-key-id
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: restic-credentials
+                  key: aws-secret-access-key
+            volumeMounts:
+            - name: maildir
+              mountPath: /maildir
+              readOnly: true
+            resources:
+              limits:
+                cpu: 100m
+                memory: 256Mi
+              requests:
+                cpu: 100m
+                memory: 256Mi
+          volumes:
+          - name: maildir
+            persistentVolumeClaim:
+              claimName: maildir-storage
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: restic-backup-account2
+  namespace: mail-backup
+spec:
+  schedule: "30 2 * * *"  # Daily at 2:30 AM (between hourly mbsync runs)
+  successfulJobsHistoryLimit: 7
+  failedJobsHistoryLimit: 3
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: restic
+            image: restic/restic:0.18.1
+            command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+              
+              echo "Initializing restic repository (if needed)..."
+              restic snapshots || restic init
+              
+              echo "Starting backup for account2..."
+              restic backup /maildir/account2 \
+                --tag mail-backup \
+                --tag account2 \
+                --host mail-backup-cluster
+              
+              echo "Applying retention policy (keep last 7 daily backups)..."
+              restic forget \
+                --keep-daily 7 \
+                --prune
+              
+              echo "Checking repository integrity..."
+              restic check --read-data-subset=5%
+              
+              echo "Backup statistics:"
+              restic stats
+              
+              echo "Recent snapshots:"
+              restic snapshots --last
+            env:
+            - name: RESTIC_REPOSITORY
+              valueFrom:
+                secretKeyRef:
+                  name: restic-credentials
+                  key: account2-repository
+            - name: RESTIC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: restic-credentials
+                  key: restic-password
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: restic-credentials
+                  key: aws-access-key-id
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: restic-credentials
+                  key: aws-secret-access-key
+            volumeMounts:
+            - name: maildir
+              mountPath: /maildir
+              readOnly: true
+            resources:
+              limits:
+                cpu: 100m
+                memory: 256Mi
+              requests:
+                cpu: 100m
+                memory: 256Mi
+          volumes:
+          - name: maildir
+            persistentVolumeClaim:
+              claimName: maildir-storage
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: restic-backup-account3
+  namespace: mail-backup
+spec:
+  schedule: "30 2 * * *"  # Daily at 2:30 AM (between hourly mbsync runs)
+  successfulJobsHistoryLimit: 7
+  failedJobsHistoryLimit: 3
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: restic
+            image: restic/restic:0.17.3
+            command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+              
+              echo "Initializing restic repository (if needed)..."
+              restic snapshots || restic init
+              
+              echo "Starting backup for account3..."
+              restic backup /maildir/account3 \
+                --tag mail-backup \
+                --tag account3 \
+                --host mail-backup-cluster
+              
+              echo "Applying retention policy (keep last 7 daily backups)..."
+              restic forget \
+                --keep-daily 7 \
+                --prune
+              
+              echo "Checking repository integrity..."
+              restic check --read-data-subset=5%
+              
+              echo "Backup statistics:"
+              restic stats
+              
+              echo "Recent snapshots:"
+              restic snapshots --last
+            env:
+            - name: RESTIC_REPOSITORY
+              valueFrom:
+                secretKeyRef:
+                  name: restic-credentials
+                  key: account3-repository
+            - name: RESTIC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: restic-credentials
+                  key: restic-password
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: restic-credentials
+                  key: aws-access-key-id
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: restic-credentials
+                  key: aws-secret-access-key
+            volumeMounts:
+            - name: maildir
+              mountPath: /maildir
+              readOnly: true
+            resources:
+              limits:
+                cpu: 100m
+                memory: 256Mi
+              requests:
+                cpu: 100m
+                memory: 256Mi
+          volumes:
+          - name: maildir
+            persistentVolumeClaim:
+              claimName: maildir-storage

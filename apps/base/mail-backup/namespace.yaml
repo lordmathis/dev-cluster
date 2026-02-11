@@ -1,0 +1,5 @@
+# /apps/base/mail-backup/namespace.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: mail-backup
