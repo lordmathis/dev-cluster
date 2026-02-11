@@ -8,20 +8,20 @@ data:
   mbsyncrc: |
     # Account 1
     IMAPAccount account1
-    Host ${MAIL_ACCOUNT1_HOST}
-    Port ${MAIL_ACCOUNT1_PORT}
-    User ${MAIL_ACCOUNT1_USER}
+    Host $${MAIL_ACCOUNT1_HOST}
+    Port $${MAIL_ACCOUNT1_PORT}
+    User $${MAIL_ACCOUNT1_USER}
     PassCmd "cat /secrets/account1-password"
     SSLType IMAPS
-    
+
     IMAPStore account1-remote
     Account account1
-    
+
     MaildirStore account1-local
     Path /maildir/account1/
     Inbox /maildir/account1/INBOX
     SubFolders Verbatim
-    
+
     Channel account1
     Far :account1-remote:
     Near :account1-local:
@@ -30,23 +30,23 @@ data:
     Sync All
     Expunge Both
     SyncState *
-    
+
     # Account 2
     IMAPAccount account2
-    Host ${MAIL_ACCOUNT2_HOST}
-    Port ${MAIL_ACCOUNT2_PORT}
-    User ${MAIL_ACCOUNT2_USER}
+    Host $${MAIL_ACCOUNT2_HOST}
+    Port $${MAIL_ACCOUNT2_PORT}
+    User $${MAIL_ACCOUNT2_USER}
     PassCmd "cat /secrets/account2-password"
     SSLType IMAPS
-    
+
     IMAPStore account2-remote
     Account account2
-    
+
     MaildirStore account2-local
     Path /maildir/account2/
     Inbox /maildir/account2/INBOX
     SubFolders Verbatim
-    
+
     Channel account2
     Far :account2-remote:
     Near :account2-local:
@@ -55,23 +55,23 @@ data:
     Sync All
     Expunge Both
     SyncState *
-    
+
     # Account 3
     IMAPAccount account3
-    Host ${MAIL_ACCOUNT3_HOST}
-    Port ${MAIL_ACCOUNT3_PORT}
-    User ${MAIL_ACCOUNT3_USER}
+    Host $${MAIL_ACCOUNT3_HOST}
+    Port $${MAIL_ACCOUNT3_PORT}
+    User $${MAIL_ACCOUNT3_USER}
     PassCmd "cat /secrets/account3-password"
     SSLType IMAPS
-    
+
     IMAPStore account3-remote
     Account account3
-    
+
     MaildirStore account3-local
     Path /maildir/account3/
     Inbox /maildir/account3/INBOX
     SubFolders Verbatim
-    
+
     Channel account3
     Far :account3-remote:
     Near :account3-local:
