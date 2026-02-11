@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(**/.env*)",
+      "Read(**/*secret.yaml)",
+      "Read(**/*secret.yml)",
+      "Read(**/*secrets.yaml)",
+      "Read(**/*secrets.yml)",
+      "Read(**/terraform.tfvars)",
+      "Read(**/s3_env.yaml)",
+      "Read(**/.terraform/**)",
+      "Read(**/users_database.yaml)"
+    ]
+  }
+}
