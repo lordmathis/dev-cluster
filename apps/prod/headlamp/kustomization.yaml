@@ -1,12 +1,13 @@
-# /apps/prod/dashboard/kustomization.yaml
+# /apps/prod/headlamp/kustomization.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: dashboard
+namespace: headlamp
 
 resources:
-  - ../../base/dashboard
+  - ../../base/headlamp
   - release.yaml
   - ingress.yaml
+  - service-account.yaml
 
 configurations:
   - kustomizeconfig.yaml

@@ -6,6 +6,6 @@ resources:
   - gitea
   - lemma
   - ghost
-  - dashboard
+  - headlamp
   - mail-backup
   - homelab-proxy

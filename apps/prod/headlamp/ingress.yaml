@@ -1,9 +1,9 @@
-# /apps/prod/dashboard/ingress.yaml
+# /apps/prod/headlamp/ingress.yaml
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
-  name: dashboard
-  namespace: dashboard
+  name: headlamp
+  namespace: headlamp
 spec:
   entryPoints:
     - websecure
@@ -13,6 +13,6 @@ spec:
     middlewares:
       - name: auth-authelia@kubernetescrd
     services:
-    - name: dashboard-headlamp
+    - name: headlamp
       port: 80
-      namespace: dashboard
+      namespace: headlamp

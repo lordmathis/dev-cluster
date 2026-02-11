@@ -1,4 +1,4 @@
-# /apps/prod/dashboard/kustomizeconfig.yaml
+# /apps/prod/headlamp/kustomizeconfig.yaml
 nameReference:
 - kind: ConfigMap
   version: v1
