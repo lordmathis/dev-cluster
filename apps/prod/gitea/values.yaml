@@ -12,10 +12,18 @@ postgresql:
   primary:
     persistence:
       storageClass: retain-local-path
+      annotations:
+        k8up.io/backup: "true"
+    podAnnotations:
+      k8up.io/backup: "true"
+      k8up.io/backupcommand: sh -c 'PGPASSWORD=$(cat $POSTGRES_PASSWORD_FILE) pg_dumpall --clean -U $POSTGRES_USER -d $POSTGRES_DATABASE'
+      k8up.io/file-extension: .sql
 
 persistence:
   enabled: true
   storageClass: retain-local-path
+  annotations:
+    k8up.io/backup: "true"
 
 image:
   rootless: true

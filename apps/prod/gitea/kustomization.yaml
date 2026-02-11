@@ -9,6 +9,8 @@ resources:
   - robots-configmap.yaml
   - release.yaml
   - ingress.yaml
+  - backup-secret.enc.yaml
+  - backup-schedule.yaml
 
 configMapGenerator:
   - name: gitea-prod-values
