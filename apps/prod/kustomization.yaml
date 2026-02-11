@@ -7,4 +7,5 @@ resources:
   - lemma
   - ghost
   - dashboard
+  - mail-backup
   - homelab-proxy
