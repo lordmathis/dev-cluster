@@ -7,7 +7,6 @@ resources:
   - ../../base/dashboard
   - release.yaml
   - ingress.yaml
-  - service-account.yaml
 
 configurations:
   - kustomizeconfig.yaml

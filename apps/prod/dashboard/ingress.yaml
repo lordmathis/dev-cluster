@@ -10,18 +10,9 @@ spec:
   routes:
   - match: Host(`${K8S_DASHBOARD_DOMAIN}`)
     kind: Rule
+    middlewares:
+      - name: auth-authelia@kubernetescrd
     services:
-    - name: dashboard-kong-proxy
-      port: 443
-      scheme: https
-      serversTransport: dashboard-transport
+    - name: dashboard-headlamp
+      port: 80
       namespace: dashboard
----
-apiVersion: traefik.io/v1alpha1
-kind: ServersTransport
-metadata:
-  name: dashboard-transport
-  namespace: dashboard
-spec:
-  serverName: dashboard-kong-proxy
-  insecureSkipVerify: true

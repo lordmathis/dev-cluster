@@ -6,4 +6,4 @@ metadata:
   namespace: dashboard
 spec:
   interval: 24h
-  url: https://kubernetes.github.io/dashboard/
+  url: https://headlamp-k8s.github.io/headlamp/
