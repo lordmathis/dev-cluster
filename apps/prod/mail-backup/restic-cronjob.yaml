@@ -24,7 +24,7 @@ spec:
               set -e
 
               echo "Removing any stale locks..."
-              restic unlock || true
+              restic unlock --remove-all || true
 
               echo "Initializing restic repository (if needed)..."
               restic snapshots || restic init
@@ -110,7 +110,7 @@ spec:
               set -e
 
               echo "Removing any stale locks..."
-              restic unlock || true
+              restic unlock --remove-all || true
 
               echo "Initializing restic repository (if needed)..."
               restic snapshots || restic init
@@ -196,7 +196,7 @@ spec:
               set -e
 
               echo "Removing any stale locks..."
-              restic unlock || true
+              restic unlock --remove-all || true
 
               echo "Initializing restic repository (if needed)..."
               restic snapshots || restic init
