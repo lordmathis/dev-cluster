@@ -10,8 +10,6 @@ spec:
   routes:
   - match: Host(`${HEADLAMP_DOMAIN}`)
     kind: Rule
-    middlewares:
-      - name: auth-authelia@kubernetescrd
     services:
     - name: headlamp
       port: 80
