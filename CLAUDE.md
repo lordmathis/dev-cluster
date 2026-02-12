@@ -60,6 +60,17 @@ app-name/
 - PVCs use local-path-provisioner
 - For backups: annotate PVCs with `k8up.io/backup: "true"`
 
+### Traefik Ingress & Middleware
+
+- Use `IngressRoute` CRD for Traefik ingress configuration
+- When referencing middleware from another namespace, use the format: `<namespace>-<middleware-name>@kubernetescrd`
+- Example: To use the `authelia` middleware from the `auth` namespace:
+  ```yaml
+  middlewares:
+    - name: "auth-authelia@kubernetescrd"
+  ```
+- The Authelia forward-auth middleware is defined in `apps/prod/authelia/forward-auth-middleware.yaml`
+
 ## Project-Specific Rules
 
 ### Documentation
