@@ -18,6 +18,6 @@ spec:
       serviceAccountName: k9s-sa
       containers:
         - name: k9s
-          image: ghcr.io/lordmathis/k9s-web:v0.23.0
+          image: ghcr.io/lordmathis/k9s-web:v0.23.1
           ports:
             - containerPort: 7681
