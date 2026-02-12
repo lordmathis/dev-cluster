@@ -22,10 +22,13 @@ spec:
             - -c
             - |
               set -e
-              
+
+              echo "Removing any stale locks..."
+              restic unlock || true
+
               echo "Initializing restic repository (if needed)..."
               restic snapshots || restic init
-              
+
               echo "Starting backup for account1..."
               restic backup /maildir/account1 \
                 --tag mail-backup \
@@ -105,10 +108,13 @@ spec:
             - -c
             - |
               set -e
-              
+
+              echo "Removing any stale locks..."
+              restic unlock || true
+
               echo "Initializing restic repository (if needed)..."
               restic snapshots || restic init
-              
+
               echo "Starting backup for account2..."
               restic backup /maildir/account2 \
                 --tag mail-backup \
@@ -188,10 +194,13 @@ spec:
             - -c
             - |
               set -e
-              
+
+              echo "Removing any stale locks..."
+              restic unlock || true
+
               echo "Initializing restic repository (if needed)..."
               restic snapshots || restic init
-              
+
               echo "Starting backup for account3..."
               restic backup /maildir/account3 \
                 --tag mail-backup \
