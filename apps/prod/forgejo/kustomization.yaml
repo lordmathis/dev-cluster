@@ -5,7 +5,7 @@ namespace: forgejo
 resources:
   - ../../base/forgejo
   - secret.enc.yaml
-  - db-credentials.enc.yaml
+  - db-credentials-secret.enc.yaml
   - db-secret.enc.yaml
   - db-cluster.yaml
   - robots-configmap.yaml
