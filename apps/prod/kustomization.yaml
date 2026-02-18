@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - authelia
   - gitea
+  - forgejo
   - lemma
   - ghost
   - k9s-web
