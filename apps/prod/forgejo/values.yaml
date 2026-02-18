@@ -1,0 +1,67 @@
+persistence:
+  storageClass: retain-local-path
+  annotations:
+    k8up.io/backup: "true"
+
+gitea:
+  admin:
+    existingSecret: forgejo-admin-secret
+    email: "${FORGEJO_ADMIN_EMAIL}"
+  additionalConfigSources:
+    - secret:
+        secretName: forgejo-db-secret
+  config:
+    actions:
+      ENABLED: true
+    federation:
+      ENABLED: true
+    session:
+      PROVIDER: db
+    cache:
+      ADAPTER: memory
+    queue:
+      TYPE: channel
+    server:
+      BUILTIN_SSH_SERVER_USER: git
+      ROOT_URL: https://${FORGEJO_DOMAIN}
+      DOMAIN: ${FORGEJO_DOMAIN}
+      SSH_CREATE_AUTHORIZED_KEYS_FILE: false
+      LANDING_PAGE: explore
+    service:
+      REQUIRE_SIGNIN_VIEW: false
+      REGISTER_MANUAL_CONFIRM: true
+      DISABLE_REGISTRATION: true
+    indexer:
+      ISSUE_INDEXER_TYPE: bleve
+      REPO_INDEXER_ENABLED: true
+
+service:
+  http:
+    type: ClusterIP
+    port: 3000
+    clusterIP:
+  ssh:
+    type: ClusterIP
+    port: 22
+
+podSecurityContext:
+  fsGroup: 1001
+
+containerSecurityContext:
+  runAsGroup: 1001
+  runAsNonRoot: true
+  runAsUser: 1001
+
+extraVolumes:
+  - name: forgejo-robots
+    configMap:
+      name: forgejo-robots
+
+extraContainerVolumeMounts:
+  - name: forgejo-robots
+    mountPath: /data/forgejo/public/robots.txt
+    subPath: robots.txt
+    readOnly: true
+
+test:
+  enabled: false
