@@ -8,3 +8,4 @@ resources:
   - tailscale
   - crowdsec
   - k8up
+  - cloudnative-pg
