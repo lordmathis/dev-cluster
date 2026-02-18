@@ -13,4 +13,4 @@ spec:
         name: forgejo-db-credentials
   storage:
     storageClass: retain-local-path
-    size: 5Gi
+    size: 1Gi
