@@ -13,6 +13,7 @@ resources:
   - ingress.yaml
   - backup-secret.enc.yaml
   - backup-schedule.yaml
+  - backup-test-job.yaml
 
 configMapGenerator:
   - name: forgejo-prod-values
