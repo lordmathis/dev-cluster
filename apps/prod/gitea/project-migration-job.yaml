@@ -56,7 +56,7 @@ spec:
               FORGEJO_PROJECT_ID=$(forgejo -Atc "
                 INSERT INTO project (title, description, creator_id, repo_id, type, is_closed, created_unix, updated_unix)
                 VALUES ('Projects', '', $FORGEJO_USER_ID, $FORGEJO_REPO_ID, $P_TYPE, $P_CLOSED::boolean, $P_CREATED, $P_UPDATED)
-                RETURNING id;")
+                RETURNING id;" | head -1)
               echo "Created project id=$FORGEJO_PROJECT_ID"
 
               # --- Step 2: Create boards ---
@@ -72,7 +72,7 @@ spec:
                 FBOARD_ID=$(forgejo -Atc "
                   INSERT INTO project_board (title, \"default\", sorting, color, project_id, creator_id, created_unix, updated_unix)
                   VALUES ('$TITLE_ESC', $IS_DEFAULT::boolean, $SORTING, '$COLOR', $FORGEJO_PROJECT_ID, $FORGEJO_USER_ID, $B_CREATED, $B_UPDATED)
-                  RETURNING id;")
+                  RETURNING id;" | head -1)
                 echo "  '$TITLE': gitea=$GBOARD_ID -> forgejo=$FBOARD_ID"
                 printf '%s|%s\n' "$GBOARD_ID" "$FBOARD_ID" >> /tmp/board_map.txt
               done < /tmp/boards.txt
