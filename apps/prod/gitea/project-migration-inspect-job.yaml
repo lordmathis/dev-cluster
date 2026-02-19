@@ -88,7 +88,7 @@ spec:
 
               echo ""
               echo "--- Project issues with board/column assignment ---"
-              psql -c "SELECT pi.issue_id, i.index AS issue_number, i.title AS issue_title, i.is_closed, b.title AS board_title, b.id AS board_id FROM project_issue pi JOIN issue i ON i.id = pi.issue_id LEFT JOIN $BOARD_TABLE b ON b.id = pi.$BOARD_COL WHERE pi.project_id = $PROJECT_ID ORDER BY b.sorting NULLS LAST, i.index;"
+              psql -c "SELECT pi.issue_id, i.index AS issue_number, i.name AS issue_title, i.is_closed, b.title AS board_title, b.id AS board_id FROM project_issue pi JOIN issue i ON i.id = pi.issue_id LEFT JOIN $BOARD_TABLE b ON b.id = pi.$BOARD_COL WHERE pi.project_id = $PROJECT_ID ORDER BY b.sorting NULLS LAST, i.index;"
 
               echo ""
               echo "--- Summary ---"
