@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: forgejo-project-schema-check
+  name: forgejo-project-issue-id-check
   namespace: forgejo
 spec:
   backoffLimit: 0
@@ -28,35 +28,27 @@ spec:
             - -c
             - |
               set -e
-              echo "=== Forgejo Project Schema Check ==="
+              echo "=== Forgejo Issue ID Check ==="
+
+              REPO_ID=$(psql -Atc "SELECT r.id FROM repository r JOIN \"user\" u ON u.id = r.owner_id WHERE u.lower_name = 'mathis' AND lower(r.name) = 'projects';")
+              echo "Repo ID: $REPO_ID"
 
               echo ""
-              echo "--- Project-related tables ---"
-              psql -c "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_name LIKE 'project%' ORDER BY table_name;"
+              echo "--- Issue id vs index for Mathis/Projects (sample: first 20 and last 20) ---"
+              psql -c "SELECT id, \"index\", name FROM issue WHERE repo_id = $REPO_ID ORDER BY \"index\" LIMIT 20;"
+              psql -c "SELECT id, \"index\", name FROM issue WHERE repo_id = $REPO_ID ORDER BY \"index\" DESC LIMIT 20;"
 
               echo ""
-              echo "--- project table schema ---"
-              psql -c "SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_schema = 'public' AND table_name = 'project' ORDER BY ordinal_position;"
+              echo "--- Do id and index match for all issues? ---"
+              psql -c "SELECT COUNT(*) AS mismatches FROM issue WHERE repo_id = $REPO_ID AND id != \"index\";"
 
               echo ""
-              echo "--- project_board table schema (if exists) ---"
-              psql -c "SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_schema = 'public' AND table_name = 'project_board' ORDER BY ordinal_position;"
+              echo "--- Total issues in repo ---"
+              psql -c "SELECT COUNT(*) FROM issue WHERE repo_id = $REPO_ID;"
 
               echo ""
-              echo "--- project_column table schema (if exists) ---"
-              psql -c "SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_schema = 'public' AND table_name = 'project_column' ORDER BY ordinal_position;"
-
-              echo ""
-              echo "--- project_issue table schema ---"
-              psql -c "SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_schema = 'public' AND table_name = 'project_issue' ORDER BY ordinal_position;"
-
-              echo ""
-              echo "--- User: mathis ---"
-              psql -c "SELECT id, name, lower_name, full_name FROM \"user\" WHERE lower_name = 'mathis';"
-
-              echo ""
-              echo "--- Repository Mathis/Projects (if exists) ---"
-              psql -c "SELECT r.id, r.name, u.name AS owner FROM repository r JOIN \"user\" u ON u.id = r.owner_id WHERE u.lower_name = 'mathis' AND lower(r.name) = 'projects';"
+              echo "--- Issues from the project that exist in Gitea (spot check by index) ---"
+              psql -c "SELECT id, \"index\", name FROM issue WHERE repo_id = $REPO_ID AND \"index\" IN (17,18,19,209,215,229,241,249,356) ORDER BY \"index\";"
 
               echo ""
               echo "=== Check Complete ==="
