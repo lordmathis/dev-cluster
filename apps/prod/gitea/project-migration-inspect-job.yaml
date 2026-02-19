@@ -32,9 +32,9 @@ spec:
 
               echo ""
               echo "--- User: mathis ---"
-              psql -c "SELECT id, name, login FROM \"user\" WHERE lower(login) = 'mathis';"
+              psql -c "SELECT id, name, lower_name, full_name FROM \"user\" WHERE lower_name = 'mathis';"
 
-              REPO_ID=$(psql -Atc "SELECT r.id FROM repository r JOIN \"user\" u ON u.id = r.owner_id WHERE lower(u.login) = 'mathis' AND lower(r.name) = 'projects';")
+              REPO_ID=$(psql -Atc "SELECT r.id FROM repository r JOIN \"user\" u ON u.id = r.owner_id WHERE u.lower_name = 'mathis' AND lower(r.name) = 'projects';")
               if [ -z "$REPO_ID" ]; then
                 echo "ERROR: Repository Mathis/Projects not found"
                 exit 1
