@@ -11,6 +11,11 @@ spec:
       owner: forgejo
       secret:
         name: forgejo-db-credentials
+  inheritedMetadata:
+    annotations:
+      k8up.io/backup: "true"
+      k8up.io/backupcommand: sh -c 'pg_dumpall --clean -U postgres'
+      k8up.io/file-extension: .sql
   storage:
     storageClass: retain-local-path
     size: 1Gi
