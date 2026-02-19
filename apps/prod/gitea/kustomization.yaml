@@ -11,6 +11,7 @@ resources:
   - ingress.yaml
   - backup-secret.enc.yaml
   - backup-schedule.yaml
+  - project-migration-inspect-job.yaml
 
 configMapGenerator:
   - name: gitea-prod-values
