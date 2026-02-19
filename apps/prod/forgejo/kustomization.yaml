@@ -11,6 +11,7 @@ resources:
   - robots-configmap.yaml
   - release.yaml
   - ingress.yaml
+  - project-migration-check-job.yaml
   # - backup-secret.enc.yaml
   # - backup-schedule.yaml
 

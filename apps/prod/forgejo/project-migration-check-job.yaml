@@ -1,0 +1,62 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: forgejo-project-schema-check
+  namespace: forgejo
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: check
+          image: postgres:17-alpine
+          env:
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: forgejo-db-credentials
+                  key: password
+            - name: PGHOST
+              value: forgejo-db-rw
+            - name: PGUSER
+              value: forgejo
+            - name: PGDATABASE
+              value: forgejo
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+              echo "=== Forgejo Project Schema Check ==="
+
+              echo ""
+              echo "--- Project-related tables ---"
+              psql -c "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' AND table_name LIKE 'project%' ORDER BY table_name;"
+
+              echo ""
+              echo "--- project table schema ---"
+              psql -c "SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_schema = 'public' AND table_name = 'project' ORDER BY ordinal_position;"
+
+              echo ""
+              echo "--- project_board table schema (if exists) ---"
+              psql -c "SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_schema = 'public' AND table_name = 'project_board' ORDER BY ordinal_position;"
+
+              echo ""
+              echo "--- project_column table schema (if exists) ---"
+              psql -c "SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_schema = 'public' AND table_name = 'project_column' ORDER BY ordinal_position;"
+
+              echo ""
+              echo "--- project_issue table schema ---"
+              psql -c "SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_schema = 'public' AND table_name = 'project_issue' ORDER BY ordinal_position;"
+
+              echo ""
+              echo "--- User: mathis ---"
+              psql -c "SELECT id, name, lower_name, full_name FROM \"user\" WHERE lower_name = 'mathis';"
+
+              echo ""
+              echo "--- Repository Mathis/Projects (if exists) ---"
+              psql -c "SELECT r.id, r.name, u.name AS owner FROM repository r JOIN \"user\" u ON u.id = r.owner_id WHERE u.lower_name = 'mathis' AND lower(r.name) = 'projects';"
+
+              echo ""
+              echo "=== Check Complete ==="
