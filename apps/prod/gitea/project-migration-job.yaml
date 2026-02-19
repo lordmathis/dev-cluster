@@ -1,0 +1,116 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: gitea-to-forgejo-project-migration
+  namespace: gitea
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: migrate
+          image: postgres:17-alpine
+          env:
+            - name: GITEA_PW
+              valueFrom:
+                secretKeyRef:
+                  name: gitea-postgresql
+                  key: password
+            - name: FORGEJO_PW
+              valueFrom:
+                secretKeyRef:
+                  name: forgejo-db-migration
+                  key: password
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+              GITEA_CONN="postgresql://gitea:${GITEA_PW}@gitea-postgresql/gitea"
+              FORGEJO_CONN="postgresql://forgejo:${FORGEJO_PW}@forgejo-db-rw.forgejo.svc.cluster.local/forgejo"
+
+              echo "=== Gitea -> Forgejo Project Migration ==="
+
+              # --- Resolve IDs ---
+              FORGEJO_USER_ID=$(psql "$FORGEJO_CONN" -Atc "SELECT id FROM \"user\" WHERE lower_name = 'mathis';")
+              FORGEJO_REPO_ID=$(psql "$FORGEJO_CONN" -Atc "SELECT r.id FROM repository r JOIN \"user\" u ON u.id = r.owner_id WHERE u.lower_name = 'mathis' AND lower(r.name) = 'projects';")
+              GITEA_PROJECT_ID=$(psql "$GITEA_CONN" -Atc "SELECT p.id FROM project p JOIN repository r ON r.id = p.repo_id JOIN \"user\" u ON u.id = r.owner_id WHERE u.lower_name = 'mathis' AND lower(r.name) = 'projects' AND p.title = 'Projects';")
+              echo "Forgejo: user_id=$FORGEJO_USER_ID repo_id=$FORGEJO_REPO_ID"
+              echo "Gitea:   project_id=$GITEA_PROJECT_ID"
+              if [ -z "$GITEA_PROJECT_ID" ] || [ -z "$FORGEJO_USER_ID" ] || [ -z "$FORGEJO_REPO_ID" ]; then
+                echo "ERROR: failed to resolve required IDs"
+                exit 1
+              fi
+
+              # --- Step 1: Create project ---
+              echo ""
+              echo "=== Step 1: Create project ==="
+              GITEA_ROW=$(psql "$GITEA_CONN" -Atc "SELECT type, is_closed::int, created_unix, updated_unix FROM project WHERE id = $GITEA_PROJECT_ID;")
+              P_TYPE=$(echo "$GITEA_ROW" | cut -d'|' -f1)
+              P_CLOSED=$(echo "$GITEA_ROW" | cut -d'|' -f2)
+              P_CREATED=$(echo "$GITEA_ROW" | cut -d'|' -f3)
+              P_UPDATED=$(echo "$GITEA_ROW" | cut -d'|' -f4)
+              FORGEJO_PROJECT_ID=$(psql "$FORGEJO_CONN" -Atc "
+                INSERT INTO project (title, description, creator_id, repo_id, type, is_closed, created_unix, updated_unix)
+                VALUES ('Projects', '', $FORGEJO_USER_ID, $FORGEJO_REPO_ID, $P_TYPE, $P_CLOSED::boolean, $P_CREATED, $P_UPDATED)
+                RETURNING id;")
+              echo "Created project id=$FORGEJO_PROJECT_ID"
+
+              # --- Step 2: Create boards ---
+              echo ""
+              echo "=== Step 2: Create boards ==="
+              psql "$GITEA_CONN" -Atc "
+                SELECT id, title, \"default\"::int, sorting, COALESCE(color,''), created_unix, updated_unix
+                FROM project_board WHERE project_id = $GITEA_PROJECT_ID ORDER BY sorting;" > /tmp/boards.txt
+
+              > /tmp/board_map.txt
+              while IFS='|' read GBOARD_ID TITLE IS_DEFAULT SORTING COLOR B_CREATED B_UPDATED; do
+                TITLE_ESC=$(printf '%s' "$TITLE" | sed "s/'/''/g")
+                FBOARD_ID=$(psql "$FORGEJO_CONN" -Atc "
+                  INSERT INTO project_board (title, \"default\", sorting, color, project_id, creator_id, created_unix, updated_unix)
+                  VALUES ('$TITLE_ESC', $IS_DEFAULT::boolean, $SORTING, '$COLOR', $FORGEJO_PROJECT_ID, $FORGEJO_USER_ID, $B_CREATED, $B_UPDATED)
+                  RETURNING id;")
+                echo "  '$TITLE': gitea=$GBOARD_ID -> forgejo=$FBOARD_ID"
+                printf '%s|%s\n' "$GBOARD_ID" "$FBOARD_ID" >> /tmp/board_map.txt
+              done < /tmp/boards.txt
+
+              # --- Step 3: Migrate project_issues (bulk) ---
+              echo ""
+              echo "=== Step 3: Migrate project issues ==="
+              psql "$GITEA_CONN" -Atc "
+                SELECT issue_id, project_board_id, sorting
+                FROM project_issue WHERE project_id = $GITEA_PROJECT_ID
+                ORDER BY issue_id;" > /tmp/issues.txt
+              echo "Issues to migrate: $(wc -l < /tmp/issues.txt | tr -d ' ')"
+
+              # Build CTE with all gitea issue data as VALUES
+              printf 'WITH gitea_issues (issue_index, gitea_board_id, sorting) AS (VALUES\n' > /tmp/migrate.sql
+              awk -F'|' 'NR>1{printf ","} {printf "  (%s,%s,%s)\n", $1, $2, $3}' /tmp/issues.txt >> /tmp/migrate.sql
+
+              # Board mapping CTE (5 entries, built from recorded mapping)
+              BOARD_MAP=$(awk -F'|' 'NR>1{printf ","} {printf "(%s,%s)", $1, $2}' /tmp/board_map.txt)
+              printf '),\nboard_map (gitea_id, forgejo_id) AS (VALUES %s)\n' "$BOARD_MAP" >> /tmp/migrate.sql
+              printf 'INSERT INTO project_issue (issue_id, project_id, project_board_id, sorting)\n' >> /tmp/migrate.sql
+              printf 'SELECT i.id, %s, bm.forgejo_id, gi.sorting\n' "$FORGEJO_PROJECT_ID" >> /tmp/migrate.sql
+              printf 'FROM gitea_issues gi\n' >> /tmp/migrate.sql
+              printf 'JOIN issue i ON i.repo_id = %s AND i."index" = gi.issue_index\n' "$FORGEJO_REPO_ID" >> /tmp/migrate.sql
+              printf 'JOIN board_map bm ON bm.gitea_id = gi.gitea_board_id\n' >> /tmp/migrate.sql
+              printf 'ON CONFLICT DO NOTHING\nRETURNING issue_id;\n' >> /tmp/migrate.sql
+
+              INSERTED=$(psql "$FORGEJO_CONN" -Atf /tmp/migrate.sql | wc -l | tr -d ' ')
+              echo "Inserted: $INSERTED project_issue records"
+
+              # --- Step 4: Verify ---
+              echo ""
+              echo "=== Verification ==="
+              psql "$FORGEJO_CONN" -c "
+                SELECT b.title AS board, b.sorting, COUNT(pi.id) AS issues
+                FROM project_board b
+                LEFT JOIN project_issue pi ON pi.project_board_id = b.id
+                WHERE b.project_id = $FORGEJO_PROJECT_ID
+                GROUP BY b.id, b.title, b.sorting
+                ORDER BY b.sorting;"
+
+              echo ""
+              echo "=== Migration Complete ==="
