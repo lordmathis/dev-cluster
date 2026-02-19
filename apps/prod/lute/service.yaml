@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: lute
+  namespace: lute
+spec:
+  selector:
+    app: lute
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 5001
+      targetPort: 5001

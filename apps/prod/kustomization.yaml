@@ -10,3 +10,4 @@ resources:
   - k9s-web
   - mail-backup
   - homelab-proxy
+  - lute

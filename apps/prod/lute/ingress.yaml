@@ -1,0 +1,16 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: lute
+  namespace: lute
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`${LUTE_DOMAIN}`)
+      kind: Rule
+      middlewares:
+        - name: "auth-authelia@kubernetescrd"
+      services:
+        - name: lute
+          port: 5001
