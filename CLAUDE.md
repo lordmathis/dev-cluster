@@ -25,6 +25,7 @@ dev-cluster/
 - **SOPS + Age**: Secrets encryption
 - **local-path-provisioner**: Local storage with `retain-local-path` storage class
 - **k8up**: Kubernetes backup operator using Restic + S3
+- **CloudNativePG**: PostgreSQL operator for managed database clusters
 
 ## Important Conventions
 
@@ -102,8 +103,8 @@ The user prefers concise, direct implementation without unnecessary documentatio
 
 - Disaster recovery focused (not long-term archival)
 - Retention: keepLast: 3, keepDaily: 7
-- PostgreSQL databases require pre-backup hooks with `pg_dump`
-- Bitnami PostgreSQL uses `POSTGRES_PASSWORD_FILE` (not direct env var)
+- PostgreSQL databases (CloudNativePG) use pod annotations for `pg_dumpall` pre-backup hooks
+- Mail backups use custom Restic CronJobs (3 separate jobs per account), daily at 2:30 AM
 - Backup pods run as `runAsUser: 0` to read all files
 
 ## Common Operations
@@ -134,38 +135,52 @@ Add variables to `clusters/prod/cluster-vars.yaml`, reference with `${VAR_NAME}`
 ## Deployed Applications
 
 ### Production Apps
-- **gitea**: Git service with PostgreSQL backend (has k8up backups)
-- **ghost**: Blog/CMS
-- **authelia**: Authentication/SSO
-- **dashboard**: Kubernetes dashboard
+- **forgejo**: Git service with CloudNativePG PostgreSQL backend (has k8up backups)
+- **ghost**: Blog/CMS (SQLite3, ghost:5-alpine)
+- **authelia**: Authentication/SSO (HelmRelease v0.10.49, SQLite local storage, file-based users)
+- **k9s-web**: Kubernetes dashboard web UI (namespace: k9s)
 - **homelab-proxy**: Proxy service
-- **lemma**: Application
+- **lemma**: Custom application (ghcr.io/lordmathis/lemma:latest, SQLite3)
+- **lute**: Custom application
+- **mail-backup**: Mail synchronization (mbsync, hourly CronJobs) + Restic backups (3 mail accounts, daily)
 
 ### Infrastructure Controllers
 - **metallb**: Load balancer
 - **cert-manager**: TLS certificate management
-- **traefik**: Ingress controller
+- **traefik**: Ingress controller (v39.0.2, with crowdsec-bouncer plugin)
 - **tailscale**: VPN/networking
 - **crowdsec**: Security/IPS
-- **k8up**: Backup operator
+- **k8up**: Backup operator (v4.8.6)
+- **cloudnative-pg**: PostgreSQL operator (v0.27.1)
 
 ## Backup Configuration
 
-k8up is configured for Gitea with:
+### Forgejo (k8up)
+
+k8up Schedule CRD in `apps/prod/forgejo/backup-schedule.yaml`:
 - Daily backups at 2:00 AM
 - Weekly checks (Sundays 3:00 AM)
 - Weekly pruning (Sundays 4:00 AM)
-- S3-compatible backend storage
-- PostgreSQL pre-backup hook: `pg_dumpall` with password from file
+- S3-compatible backend, credentials and endpoint via Flux variable substitution
+- CloudNativePG pod annotation for `pg_dumpall` pre-backup hook
 
-### PostgreSQL Backup Annotations
+#### CloudNativePG Backup Annotations
 
 ```yaml
-podAnnotations:
-  k8up.io/backup: "true"
-  k8up.io/backupcommand: sh -c 'PGPASSWORD=$(cat $POSTGRES_PASSWORD_FILE) pg_dumpall --clean -U $POSTGRES_USER -d $POSTGRES_DATABASE'
-  k8up.io/file-extension: .sql
+# On the CloudNativePG Cluster spec (db-cluster.yaml):
+inheritedMetadata:
+  annotations:
+    k8up.io/backup: "true"
+    k8up.io/backupcommand: sh -c 'pg_dumpall --clean -U postgres'
+    k8up.io/file-extension: .sql
 ```
+
+### Mail Backup (Restic CronJobs)
+
+3 separate Restic CronJobs in `apps/prod/mail-backup/restic-cronjob.yaml`:
+- Daily at 2:30 AM, one per mail account
+- keep-daily 7 retention
+- Includes `restic unlock --remove-all || true` for stale lock handling
 
 ## Working with This Project
 
