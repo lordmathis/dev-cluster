@@ -8,4 +8,4 @@ resources:
 - service.yaml
 - pvc.yaml
 - ingress.yaml
-- tailscale-egress.yaml
+- secret.enc.yaml
