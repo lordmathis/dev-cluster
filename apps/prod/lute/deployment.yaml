@@ -25,25 +25,6 @@ spec:
               mountPath: /lute_data
             - name: lute-backup
               mountPath: /lute_backup
-        - name: tailscale
-          image: ghcr.io/tailscale/tailscale:latest
-          env:
-            - name: TS_AUTHKEY
-              valueFrom:
-                secretKeyRef:
-                  name: lute-tailscale
-                  key: authkey
-            - name: TS_STATE
-              value: "mem:"
-            - name: TS_ACCEPT_DNS
-              value: "true"
-          securityContext:
-            capabilities:
-              add:
-                - NET_ADMIN
-          volumeMounts:
-            - name: dev-tun
-              mountPath: /dev/net/tun
       volumes:
         - name: lute-data
           persistentVolumeClaim:
@@ -51,7 +32,3 @@ spec:
         - name: lute-backup
           persistentVolumeClaim:
             claimName: lute-backup
-        - name: dev-tun
-          hostPath:
-            path: /dev/net/tun
-            type: CharDevice
