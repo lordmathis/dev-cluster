@@ -116,3 +116,16 @@ Provisioning, configuration and manifests for my Kubernetes dev cluster on Hetzn
       --components-extra=image-reflector-controller,image-automation-controller \
       --path=clusters/prod --personal
    ```
+
+## Troubleshooting
+
+### 404 Errors After Reboot
+   
+After reboot the `crowdsec-agent` is waiting on `crowdsec-lapi` to become available. As a result, the `crowdsec-bouncer` middleware becomes unavailable, causing Traefik to return a 404 error.
+
+**Solution**
+
+1. Delete `crowdsec-agent` pod
+2. Run `flux reconcile kustomization infrastructure-controllers`
+3. Delete `traefik` pod
+4. Run the same `flux reconcile` command again
