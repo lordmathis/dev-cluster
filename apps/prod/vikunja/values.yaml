@@ -1,0 +1,10 @@
+vikunja:
+  persistence:
+    data:
+      storageClass: retain-local-path
+  ingress:
+    main:
+      enabled: false
+  env:
+    VIKUNJA_SERVICE_PUBLICURL: ${VIKUNJA_DOMAIN}
+    VIKUNJA_SERVICE_ENABLEREGISTRATION: false

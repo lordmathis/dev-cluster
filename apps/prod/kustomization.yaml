@@ -4,9 +4,9 @@ kind: Kustomization
 resources:
   - authelia
   - forgejo
-  - lemma
   - ghost
   - k9s-web
   - mail-backup
   - homelab-proxy
   - lute
+  - vikunja
