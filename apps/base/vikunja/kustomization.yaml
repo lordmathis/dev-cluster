@@ -4,3 +4,4 @@ namespace: vikunja
 
 resources:
 - namespace.yaml
+- repository.yaml
