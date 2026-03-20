@@ -8,5 +8,5 @@ vikunja:
     main:
       enabled: false
   env:
-    VIKUNJA_SERVICE_PUBLICURL: ${VIKUNJA_DOMAIN}
+    VIKUNJA_SERVICE_PUBLICURL: https://${VIKUNJA_DOMAIN}
     VIKUNJA_SERVICE_ENABLEREGISTRATION: false
