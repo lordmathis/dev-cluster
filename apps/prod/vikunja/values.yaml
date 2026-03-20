@@ -2,6 +2,8 @@ vikunja:
   persistence:
     data:
       storageClass: retain-local-path
+    database:
+      storageClass: retain-local-path
   ingress:
     main:
       enabled: false
