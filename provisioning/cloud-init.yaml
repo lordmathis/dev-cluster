@@ -49,24 +49,6 @@ write_files:
         AuthorizedKeysCommand /usr/local/bin/forgejo-keys %u %t %k
     path: /etc/ssh/sshd_config.d/50-forgejo.conf
     permissions: "0644"
-  - content: |
-      apiVersion: k0s.config.k8s.io/v1beta1
-      kind: ClusterConfig
-      metadata:
-        name: k0s
-      spec:
-        network:
-          provider: kuberouter
-          kuberouter:
-            autoMTU: true
-          podCIDR: 10.244.0.0/16
-          serviceCIDR: 10.96.0.0/12
-          dualStack:
-            enabled: true
-            IPv6PodCIDR: fd00:10:244::/64
-            IPv6ServiceCIDR: fd00:10:96::/112
-    path: /etc/k0s/k0s.yaml
-    permissions: "0644"
 
 ssh:
   emit_keys_to_console: true
@@ -91,7 +73,7 @@ runcmd:
   - install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
   # Install k0s
   - curl -sSLf https://get.k0s.sh | sh
-  - k0s install controller --single --config /etc/k0s/k0s.yaml
+  - k0s install controller --single
   - systemctl enable --now k0scontroller
   # Wait for k0s to be ready
   - sleep 10
