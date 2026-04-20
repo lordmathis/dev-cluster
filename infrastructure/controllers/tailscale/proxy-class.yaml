@@ -5,8 +5,5 @@ metadata:
   namespace: tailscale
 spec:
   statefulSet:
-    spec:
-      template:
-        spec:
-          hostNetwork: true
-          dnsPolicy: ClusterFirstWithHostNet
+    pod:
+      hostNetwork: true
