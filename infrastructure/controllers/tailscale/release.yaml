@@ -14,7 +14,3 @@ spec:
         name: tailscale
         namespace: tailscale
       interval: 12h
-  values:
-    proxyConfig:
-      default:
-        hostNetwork: true

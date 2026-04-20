@@ -5,3 +5,4 @@ resources:
   - secret.enc.yaml
   - repository.yaml
   - release.yaml
+  - proxy-class.yaml

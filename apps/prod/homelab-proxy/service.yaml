@@ -5,6 +5,7 @@ metadata:
   namespace: homelab-proxy
   annotations:
     tailscale.com/tailnet-fqdn: ${HOMELAB_TAILNET_FQDN}
+    tailscale.com/proxy-class: host-network
 spec:
   type: ExternalName
   externalName: placeholder
