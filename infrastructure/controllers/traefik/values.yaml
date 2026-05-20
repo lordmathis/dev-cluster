@@ -26,8 +26,6 @@ ports:
     http:
       tls:
         enabled: true
-      middlewares:
-        - "crowdsec-crowdsec-bouncer@kubernetescrd"
   web:
     http:
       redirections:
