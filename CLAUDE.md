@@ -147,9 +147,8 @@ Add variables to `clusters/prod/cluster-vars.yaml`, reference with `${VAR_NAME}`
 ### Infrastructure Controllers
 - **metallb**: Load balancer
 - **cert-manager**: TLS certificate management
-- **traefik**: Ingress controller (v39.0.2, with crowdsec-bouncer plugin)
+- **traefik**: Ingress controller
 - **tailscale**: VPN/networking
-- **crowdsec**: Security/IPS
 - **k8up**: Backup operator (v4.8.6)
 - **cloudnative-pg**: PostgreSQL operator (v0.27.1)
 

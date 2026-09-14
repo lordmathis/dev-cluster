@@ -6,6 +6,5 @@ resources:
   - cert-manager
   - traefik
   - tailscale
-  # - crowdsec
   - k8up
   - cloudnative-pg
