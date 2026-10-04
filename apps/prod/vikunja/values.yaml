@@ -7,6 +7,24 @@ vikunja:
   ingress:
     main:
       enabled: false
+  configMaps:
+    config:
+      enabled: true
+      data:
+        config.yml: |
+          auth:
+            openid:
+              enabled: true
+              providers:
+                authelia:
+                  name: Authelia
+                  authurl: https://${AUTHELIA_DOMAIN}
+                  clientid: vikunja
   env:
     VIKUNJA_SERVICE_PUBLICURL: https://${VIKUNJA_DOMAIN}
     VIKUNJA_SERVICE_ENABLEREGISTRATION: false
+    VIKUNJA_AUTH_OPENID_PROVIDERS_AUTHELIA_CLIENTSECRET:
+      valueFrom:
+        secretKeyRef:
+          name: vikunja-oidc
+          key: clientsecret

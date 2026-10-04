@@ -6,6 +6,7 @@ resources:
   - ../../base/vikunja
   - release.yaml
   - ingress.yaml
+  - oidc-secret.enc.yaml
 
 configMapGenerator:
   - name: vikunja-prod-values

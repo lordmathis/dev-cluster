@@ -49,6 +49,12 @@ configMap:
             path: '/secrets/authelia-oidc/forgejo.client'
           redirect_uris:
             - 'https://${FORGEJO_DOMAIN}/user/oauth2/Authelia/callback'
+        - client_id: 'vikunja'
+          client_name: 'Vikunja'
+          client_secret:
+            path: '/secrets/authelia-oidc/vikunja.client'
+          redirect_uris:
+            - 'https://${VIKUNJA_DOMAIN}/auth/openid/authelia'
 
 secret:
   additionalSecrets:
