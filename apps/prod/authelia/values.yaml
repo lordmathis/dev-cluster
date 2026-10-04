@@ -20,7 +20,7 @@ configMap:
       enabled: false
     cookies:
       - domain: '${MAIN_DOMAIN}'
-        authelia_url: 'https://${AUTHELIA_DOMAIN}'
+        subdomain: 'auth'
         name: 'authelia_session'
   storage:
     local:
@@ -33,6 +33,26 @@ configMap:
       enabled: false
     filesystem:
       enabled: true
+  identity_providers:
+    oidc:
+      enabled: true
+      jwks:
+        - key_id: 'rs256-1'
+          algorithm: 'RS256'
+          use: 'sig'
+          key:
+            path: '/secrets/authelia-oidc/rs256.pem'
+      clients:
+        - client_id: 'forgejo'
+          client_name: 'Forgejo'
+          client_secret:
+            path: '/secrets/authelia-oidc/forgejo.client'
+          redirect_uris:
+            - 'https://${FORGEJO_DOMAIN}/user/oauth2/authelia/callback'
+
+secret:
+  additionalSecrets:
+    authelia-oidc: {}
 
 pod:
   extraVolumeMounts:
