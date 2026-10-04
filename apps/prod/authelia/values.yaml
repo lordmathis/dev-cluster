@@ -48,7 +48,7 @@ configMap:
           client_secret:
             path: '/secrets/authelia-oidc/forgejo.client'
           redirect_uris:
-            - 'https://${FORGEJO_DOMAIN}/user/oauth2/authelia/callback'
+            - 'https://${FORGEJO_DOMAIN}/user/oauth2/Authelia/callback'
 
 secret:
   additionalSecrets:

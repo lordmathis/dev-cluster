@@ -20,6 +20,7 @@ GitOps-managed Kubernetes cluster on Hetzner Cloud, deployed with Flux CD.
 - Keep solutions simple and focused on the immediate requirement. No over-engineering, no "nice-to-have" features, no error handling for scenarios that can't happen.
 - Read existing files first and follow their patterns exactly, matching YAML formatting and structure.
 - Ask before making destructive or irreversible changes.
+- Do not create secrets yourself - tell the user which commands to run to generate them
 
 ## User Preferences
 

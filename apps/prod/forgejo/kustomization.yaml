@@ -11,6 +11,8 @@ resources:
   - robots-configmap.yaml
   - release.yaml
   - ingress.yaml
+  - anubis-deployment.yaml
+  - anubis-secret.enc.yaml
   - backup-secret.enc.yaml
   - backup-schedule.yaml
 

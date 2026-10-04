@@ -10,5 +10,5 @@ spec:
   - match: Host(`${FORGEJO_DOMAIN}`)
     kind: Rule
     services:
-    - name: forgejo-http
-      port: 3000
+    - name: anubis
+      port: 8080
