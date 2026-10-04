@@ -20,6 +20,8 @@ vikunja:
                   name: Authelia
                   authurl: https://${AUTHELIA_DOMAIN}
                   clientid: vikunja
+                  usernamefallback: true
+                  emailfallback: true
   env:
     VIKUNJA_SERVICE_PUBLICURL: https://${VIKUNJA_DOMAIN}
     VIKUNJA_SERVICE_ENABLEREGISTRATION: false
