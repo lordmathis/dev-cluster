@@ -42,6 +42,9 @@ configMap:
           use: 'sig'
           key:
             path: '/secrets/authelia-oidc/rs256.pem'
+      claims_policies:
+        llamactl:
+          id_token: ['name', 'email', 'email_verified']  
       clients:
         - client_id: 'forgejo'
           client_name: 'Forgejo'
