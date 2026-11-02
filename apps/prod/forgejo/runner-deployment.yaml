@@ -17,6 +17,9 @@ spec:
         - name: runner
           image: code.forgejo.org/forgejo/runner:13
           imagePullPolicy: IfNotPresent
+          command:
+            - /bin/bash
+            - -c
           args:
             - >-
               while ! nc -z localhost 2375 </dev/null ; do
@@ -71,7 +74,6 @@ spec:
           image: docker:29-dind
           imagePullPolicy: IfNotPresent
           env:
-            # Empty: dockerd listens on plain tcp://0.0.0.0:2375 (pod-local).
             - name: DOCKER_TLS_CERTDIR
               value: ""
           volumeMounts:
