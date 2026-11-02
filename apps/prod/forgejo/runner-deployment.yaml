@@ -21,21 +21,16 @@ spec:
             - /bin/bash
             - -c
           args:
-            - >-
-              while ! nc -z localhost 2375 </dev/null ; do
-              echo 'waiting for docker daemon...' ;
-              sleep 5 ;
-              done ;
-              forgejo-runner
-            - daemon
-            - --config
-            - /config/config.yml
-            - --url
-            - http://forgejo-http.forgejo.svc.cluster.local:3000
-            - --uuid
-            - $(RUNNER_UUID)
-            - --token-url
-            - file:///secret/token
+            - |
+              while ! nc -z localhost 2375 </dev/null; do
+                echo 'waiting for docker daemon...'
+                sleep 5
+              done
+              exec forgejo-runner daemon \
+                --config /config/config.yml \
+                --url http://forgejo-http.forgejo.svc.cluster.local:3000 \
+                --uuid "${RUNNER_UUID}" \
+                --token-url file:///secret/token
           env:
             - name: RUNNER_UUID
               valueFrom:
