@@ -15,6 +15,9 @@ resources:
   - anubis-secret.enc.yaml
   - backup-secret.enc.yaml
   - backup-schedule.yaml
+  - runner-configmap.yaml
+  - runner-deployment.yaml
+  - runner-secret.enc.yaml
 
 configMapGenerator:
   - name: forgejo-prod-values

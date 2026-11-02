@@ -1,0 +1,93 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: forgejo-runner
+  namespace: forgejo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: forgejo-runner
+  template:
+    metadata:
+      labels:
+        app: forgejo-runner
+    spec:
+      containers:
+        - name: runner
+          image: code.forgejo.org/forgejo/runner:13
+          imagePullPolicy: IfNotPresent
+          args:
+            - daemon
+            - --config
+            - /config/config.yml
+            - --url
+            - http://forgejo-http.forgejo.svc.cluster.local:3000
+            - --uuid
+            - $(RUNNER_UUID)
+            - --token-url
+            - file:///secret/token
+          env:
+            - name: RUNNER_UUID
+              valueFrom:
+                secretKeyRef:
+                  name: forgejo-runner-secret
+                  key: uuid
+            - name: DOCKER_HOST
+              value: tcp://localhost:2375
+          volumeMounts:
+            - name: config
+              mountPath: /config
+              readOnly: true
+            - name: secret
+              mountPath: /secret
+              readOnly: true
+            - name: data
+              mountPath: /data
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 1Gi
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+        - name: dind
+          image: docker:29-dind
+          imagePullPolicy: IfNotPresent
+          env:
+            # Empty: dockerd listens on plain tcp://0.0.0.0:2375 (pod-local).
+            - name: DOCKER_TLS_CERTDIR
+              value: ""
+          volumeMounts:
+            - name: docker-storage
+              mountPath: /var/lib/docker
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 2
+              memory: 4Gi
+          securityContext:
+            privileged: true
+      volumes:
+        - name: config
+          configMap:
+            name: forgejo-runner-config
+        - name: secret
+          secret:
+            secretName: forgejo-runner-secret
+        - name: data
+          emptyDir: {}
+        - name: docker-storage
+          emptyDir: {}

@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: forgejo-runner-config
+  namespace: forgejo
+data:
+  config.yml: |
+    log:
+      level: info
+
+    runner:
+      labels:
+        - docker:docker://docker.io/library/node:24-bookworm
+        - ubuntu-latest:docker://ghcr.io/catthehacker/ubuntu:act-24.04
+
+    cache:
+      # Disabled: the cache server binds inside the runner container, which is
+      # not reliably reachable from job containers spawned in the DinD sidecar.
+      enabled: false
+
+    container:
+      # Never mount a docker socket into job containers.
+      docker_host: "-"
