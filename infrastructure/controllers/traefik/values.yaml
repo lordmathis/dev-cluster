@@ -1,6 +1,6 @@
-logs:
-  access:
-    enabled: true
+accessLog:
+  enabled: true
+  filePath: /data/access.log
 ingressRoute:
   dashboard:
     enabled: true

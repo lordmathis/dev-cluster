@@ -44,6 +44,51 @@ write_files:
     permissions: "0755"
     path: /usr/local/bin/forgejo-keys
   - content: |
+      [Definition]
+      failregex = ^<HOST> \S+ \S+ \[[^\]]+\] "[A-Z]+ [^"]*(?i:\.php|wp-|phpmyadmin|wordpress)[^"]*"
+    path: /etc/fail2ban/filter.d/traefik.conf
+    permissions: "0644"
+  - content: |
+      [Definition]
+      actionstart = iptables -t raw -N f2b-<name>
+                    ip6tables -t raw -N f2b-<name>
+                    iptables -t raw -I PREROUTING -j f2b-<name>
+                    ip6tables -t raw -I PREROUTING -j f2b-<name>
+      actionstop = iptables -t raw -D PREROUTING -j f2b-<name>
+                   ip6tables -t raw -D PREROUTING -j f2b-<name>
+                   iptables -t raw -F f2b-<name>
+                   ip6tables -t raw -F f2b-<name>
+                   iptables -t raw -X f2b-<name>
+                   ip6tables -t raw -X f2b-<name>
+      actioncheck = iptables -t raw -n -L f2b-<name> >/dev/null 2>&1 || (iptables -t raw -N f2b-<name> && iptables -t raw -I PREROUTING -j f2b-<name>)
+                    ip6tables -t raw -n -L f2b-<name> >/dev/null 2>&1 || (ip6tables -t raw -N f2b-<name> && ip6tables -t raw -I PREROUTING -j f2b-<name>)
+      actionban = iptables -t raw -I f2b-<name> 1 -s <ip> -j DROP || ip6tables -t raw -I f2b-<name> 1 -s <ip> -j DROP
+      actionunban = iptables -t raw -D f2b-<name> -s <ip> -j DROP || ip6tables -t raw -D f2b-<name> -s <ip> -j DROP
+    path: /etc/fail2ban/action.d/iptables-raw.conf
+    permissions: "0644"
+  - content: |
+      [traefik]
+      enabled = true
+      filter = traefik
+      logpath = /opt/local-path-provisioner/*/access.log
+      maxretry = 1
+      findtime = 600
+      bantime = 86400
+      action = iptables-raw[name=traefik]
+    path: /etc/fail2ban/jail.d/traefik.conf
+    permissions: "0644"
+  - content: |
+      /opt/local-path-provisioner/*/access.log {
+          daily
+          rotate 7
+          compress
+          copytruncate
+          missingok
+          notifempty
+      }
+    path: /etc/logrotate.d/traefik
+    permissions: "0644"
+  - content: |
       Match User git
         AuthorizedKeysCommandUser git
         AuthorizedKeysCommand /usr/local/bin/forgejo-keys %u %t %k
