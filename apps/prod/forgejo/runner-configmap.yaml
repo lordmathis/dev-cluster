@@ -14,8 +14,6 @@ data:
         - ubuntu-latest:docker://ghcr.io/catthehacker/ubuntu:act-24.04
 
     cache:
-      # Disabled: the cache server binds inside the runner container, which is
-      # not reliably reachable from job containers spawned in the DinD sidecar.
       enabled: false
 
     container:
