@@ -29,7 +29,7 @@ spec:
               exec forgejo-runner daemon \
                 --config /config/config.yml \
                 --url http://forgejo-http.forgejo.svc.cluster.local:3000 \
-                --uuid "${RUNNER_UUID}" \
+                --uuid $(RUNNER_UUID) \
                 --token-url file:///secret/token
           env:
             - name: RUNNER_UUID
